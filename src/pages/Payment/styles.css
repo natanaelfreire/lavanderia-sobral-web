@@ -1,0 +1,87 @@
+.page-payment {
+  display: flex;
+}
+
+.page-payment .main-content {
+  margin-left: 40px;
+  margin-top: 30px;
+  width: 68%;
+}
+
+.page-payment .main-content h1 {
+  background: #4e88c7;
+  color: #ffff;
+}
+
+.body-main-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.not-paid-block {
+  width: 600px;
+  height: 130px;
+  background: #ffff;
+  border: 1px solid hsl(0, 0%, 80%);
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.not-paid-filter {
+  text-align: left;
+  width: 250px;
+}
+
+.not-paid-block div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.not-paid-head {
+  background: rgb(177, 30, 60);
+  color: #ffff;
+  padding: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 10px;
+}
+
+.not-paid-block div button {
+  font-weight: bold;
+  font-size: 14px;
+  background: rgb(30, 182, 106);
+  color: #ffff;
+  margin-right: 10px;
+  width: 80px;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.not-paid-block div button:hover {
+  background: #007c00;
+}
+
+.not-paid-info {
+  width: 280px;
+}
+
+.not-paid-info p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  text-align: center;
+}
+
+.not-paid-info span {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.not-paid-button {
+  align-self: center;
+}

@@ -1,0 +1,86 @@
+.page-make-payment {
+  display: flex;
+}
+
+.page-make-payment .main-content {
+  margin-left: 40px;
+  margin-top: 30px;
+  width: 68%;
+}
+
+.page-make-payment .main-content h1 {
+  background: #4e88c7;
+  color: #ffff;
+}
+
+.page-make-payment p {
+  font-weight: bold;
+  color: brown;
+  margin-bottom: 10px;
+  margin-left: 8px;
+}
+
+.page-make-payment label {
+  width: fit-content;
+  flex-shrink: 0;
+}
+
+.page-make-payment input {
+  width: 200px;
+}
+
+.make-payment {
+  display: flex;
+}
+
+.make-payment-block {
+  margin-right: 45px;
+}
+
+.make-payment-block + .make-payment-block {
+  border-left: 1px solid #333;
+  padding-left: 35px;
+}
+
+#make-payment-subtotal {
+  margin-left: 38px;
+}
+
+#make-payment-discount {
+  margin-left: 34px;
+}
+
+#make-payment-previous-payment {
+  margin-left: 8px;
+}
+
+.actions #order-status, .actions #payment-type {
+  margin-left: 5px;
+}
+
+.make-payment-button {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+
+#make-payment-cost, #make-payment-payment {
+  border: 1px solid brown;
+}
+
+.make-payment-button button {
+  font-weight: bold;
+  font-size: 14px;
+  background: rgb(30, 182, 106);
+  color: #ffff;
+  margin-right: 10px;
+  width: 80px;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.make-payment-button button:hover {
+  background: #007c00;
+}

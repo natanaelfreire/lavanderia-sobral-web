@@ -1,0 +1,63 @@
+.page-customers-edit {
+  display: flex;
+}
+
+.page-customers-edit .main-content {
+  margin-left: 40px;
+  margin-top: 30px;
+  width: 68%;
+}
+
+.page-customers-edit .main-content h1 {
+  background: #4e88c7;
+  color: #ffff;
+}
+
+.page-customers-edit button {
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffff;
+  width: 90px;
+  margin-left: 15px;
+  border: none;
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.page-customers-edit .save-button {
+  background: rgb(30, 182, 106);
+  margin-left: 8px;
+}
+
+.page-customers-edit .save-button:hover {
+  background: #116e11;
+}
+
+.bottom-form {
+  display: flex;
+  align-items: center;
+}
+
+.bottom-form div {
+  padding: 8px;
+  width: fit-content;
+  margin-left: 5px;
+}
+
+.bottom-form .submit-message {
+  visibility: hidden;
+}
+
+#submit-message-visibility {
+  visibility: visible;
+  background: #90ee90;
+  border: 1px solid #0e5d0e;
+}
+
+#error-message-visibility {
+  visibility: visible;
+  background: #fddfdd;
+  border: 1px solid #e42121;
+}

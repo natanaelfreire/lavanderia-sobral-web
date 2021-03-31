@@ -1,0 +1,108 @@
+.page-processing {
+  display: flex;
+}
+
+.page-processing .main-content {
+  margin-left: 40px;
+  margin-top: 30px;
+  width: 68%;
+}
+
+.page-processing .main-content h1 {
+  background: #4e88c7;
+  color: #ffff;
+}
+
+.page-processing .body-content {
+  display: flex;
+  justify-content: center;
+}
+
+.page-processing .orders-block {
+  margin-left: 10px;
+  overflow-y: scroll;
+}
+
+.buttons-top {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.buttons-top button {
+  font-weight: bold;
+  font-size: 14px;
+  width: 90px;
+  border: none;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid hsl(0, 0%, 80%);
+
+  display: flex;
+  justify-content: center;
+  color: #002541;
+  transition: background-color 0.2s;
+}
+
+.buttons-top button:hover {
+  background: #005ab9;
+  color: #ffff;
+}
+
+#style-selected {
+  background: #005ab9;
+  color: #ffff;
+}
+
+.orders-display {
+  width: 30vw;
+  height: 80vh;
+}
+
+.orders-display .order {
+  text-align: center;
+  background: #ffff;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  border: 1px solid hsl(0, 0%, 80%);
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.orders-display .order p {
+  margin-bottom: 3px;
+}
+
+.orders-display span {
+  font-weight: bold;
+}
+
+.order .order-status-pendente {
+  border: none;
+  background: brown;
+  color: #ffff;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.order .order-status-coletado {
+  border: none;
+  background: rgb(238, 136, 204);
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.order .see-details {
+  border: none;
+  color: #002541;
+  font-weight: bold;
+  padding: 4px;
+  border-radius: 15px;
+  border: 1px solid hsl(0, 0%, 80%);
+}

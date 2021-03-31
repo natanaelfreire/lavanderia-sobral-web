@@ -1,0 +1,51 @@
+.sidebar .options {
+  background: #002541;
+  color: #e0e0e0;
+}
+
+.sidebar .items {
+  background-color: #001b30;
+  color: #ffff;
+}
+
+.page-items-edit {
+  display: flex;
+}
+
+.page-items-edit .main-content {
+  margin-left: 40px;
+  margin-top: 30px;
+  width: 68%;
+}
+
+.page-items-edit .main-content h1 {
+  background: #4e88c7;
+  color: #ffff;
+}
+
+.page-items-edit .main-content .block {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-items-edit button {
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffff;
+  width: 90px;
+  margin-left: 15px;
+  border: none;
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.page-items-edit .save-button {
+  background: rgb(30, 182, 106);
+  margin-left: 8px;
+}
+
+.page-items-edit .save-button:hover {
+	background: #116e11;
+}
