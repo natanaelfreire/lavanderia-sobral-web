@@ -4,6 +4,7 @@ import { BiSearchAlt } from 'react-icons/bi';
 
 import Sidebar from '../../components/Sidebar';
 import Input from '../../components/Input';
+
 import api from '../../services/api';
 
 import './styles.css';

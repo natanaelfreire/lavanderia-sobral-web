@@ -11,6 +11,7 @@ import Orders from './pages/Orders';
 import Payment from './pages/Payment';
 import MakePayment from './pages/MakePayment';
 import Processing from './pages/Processing';
+import DownloadPdf from './pages/DownloadPdf';
 
 export default function Routes() {
   return (
@@ -26,6 +27,7 @@ export default function Routes() {
         <Route path="/payment" component={Payment} />
         <Route path="/make-payment/:id" component={MakePayment} />
         <Route path="/processing" component={Processing} />
+        <Route path="/download" component={DownloadPdf} />
       </Switch>
     </BrowserRouter>
   )
