@@ -148,7 +148,7 @@ export default function Customers() {
             onChange={handleSearchName}
           />
 
-          <button className="search-button">Buscar</button>
+          <a href="/download" target="_blank"><button className="search-button">Buscar</button></a>
         </div>
 
         <div className="display-customers">

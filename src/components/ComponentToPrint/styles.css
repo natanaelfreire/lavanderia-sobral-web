@@ -1,0 +1,95 @@
+.page-print {
+  margin-top: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+
+  font-size: 11px;
+}
+
+.page-print header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.first-via {
+  padding-bottom: 30px;
+  border-bottom: 1px dashed black;
+}
+
+.second-via {
+  padding-top: 20px;
+}
+
+.page-print span {
+  font-weight: bold;
+}
+
+.credencials {
+  display: flex;
+  align-items: center;
+}
+
+.credencials p {
+  margin-left: 5px;
+}
+
+.general-print-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.order-print-info {
+  font-weight: bold;
+}
+
+.order-print-info span {
+  font-size: 18px;
+}
+
+.table-print {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.table-print thead {
+  font-weight: bold;
+}
+
+.table-print, .table-print th, .table-print td {
+  border: none;
+  padding: 3px;
+}
+
+.print-item, .print-quantity, .print-unit, .print-discount, .print-subtotal {
+  width: 40px;
+}
+
+.print-description {
+  width: 500px;
+}
+
+.print-observation {
+  width: 300px;
+}
+
+.print-numeric-data {
+  text-align: center;
+}
+
+.page-print footer {
+  display: flex;
+  margin-top: 20px;
+}
+
+.rules-contract {
+  text-align: justify;
+  margin-right: 10px;
+}
+
+.sign-contract {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

@@ -1,0 +1,15 @@
+.pdf-button {
+  font-weight: bold;
+  font-size: 14px;
+  color: #ffff;
+  background: #4e88c7;
+  width: 90px;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.pdf-button:hover {
+  background: #005ab9;
+}
