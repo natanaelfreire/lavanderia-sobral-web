@@ -4,37 +4,9 @@ import { useReactToPrint } from 'react-to-print';
 import './styles.css';
 
 import { ComponentToPrint } from '../../components/ComponentToPrint';
+import { ComponentToPrintAll } from '../../components/ComponentToPrintAll';
+import { Item, Order } from '../../utils/interfaces';
 import api from '../../services/api';
-
-interface Order {
-  id: string;
-  order_status: string;
-  payment_status: string;
-  payment_type: string;
-  payment_moment: string;
-  delivery_date: string;
-  item_quantity: number;
-  subtotal: number;
-  discount: number
-  payment_made: number;
-  cost: number;
-  created_at: string;
-  date_number: number;
-  date_out_number: number;
-  created_hours: number;
-  customer_id: string;
-}
-
-interface Item {
-  description: string;
-  item_id: string;
-  observation: string;
-  order_id: string;
-  unit_cost: number;
-  unit_discount: number;
-  unit_quantity: number;
-  unit_subtotal: number;
-}
 
 interface ItemAddedByOrderId {
   [id: string]: Item[];
@@ -47,6 +19,7 @@ const DownloadPdf = () => {
     address: string;
     phone: string;
   }>();
+  const [ isUniqueOrder, setIsUniqueOrder ] = useState(false);
 
   const search = useLocation().search;
   const searchCustomerId = new URLSearchParams(search).get('customerId');
@@ -60,6 +33,7 @@ const DownloadPdf = () => {
     }).then(response => {
       if (response.status === 200) {
         setOrdersToPrint(response.data);
+        setIsUniqueOrder(true);
 
         api.get(`customers/${response.data.orders[0].customer_id}`).then(response => {
           if (response.status === 200) setCustomerToPrint(response.data);
@@ -68,6 +42,23 @@ const DownloadPdf = () => {
     })
   }, [searchOrderId]);
 
+  useEffect(() => {
+    if (searchCustomerId) api.get('orders', {
+      params: {
+        customerId: searchCustomerId,
+        paymentStatus: 'Pendence'
+      }
+    }).then(response => {
+      if (response.status === 200) {
+        setOrdersToPrint(response.data);
+
+        api.get(`customers/${searchCustomerId}`).then(response => {
+          if (response.status === 200) setCustomerToPrint(response.data);
+        })
+      }
+    })
+  }, [searchCustomerId]);
+
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -75,8 +66,14 @@ const DownloadPdf = () => {
   
   return (
     <div>
-      {ordersToPrint? customerToPrint? 
+      {ordersToPrint? customerToPrint? isUniqueOrder?
         <ComponentToPrint 
+          ref={componentRef}
+          orders={ordersToPrint.orders} 
+          itemAddedByOrderId={ordersToPrint.itemAddedByOrderId} 
+          customer={customerToPrint}
+        /> : 
+        <ComponentToPrintAll
           ref={componentRef}
           orders={ordersToPrint.orders} 
           itemAddedByOrderId={ordersToPrint.itemAddedByOrderId} 

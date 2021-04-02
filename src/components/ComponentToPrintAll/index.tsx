@@ -18,7 +18,7 @@ interface Props {
   }
 }
 
-export class ComponentToPrint extends React.PureComponent<Props, {}> {
+export class ComponentToPrintAll extends React.PureComponent<Props, {}> {
   render() {
     return (
       <div className="page-print">
@@ -32,8 +32,13 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
               (88) 99740-5747</p>  
             </div>
 
-            <p>Pedido Avulso Nº {this.props.orders[0].id} <br></br>
-            {this.props.orders[0].created_at} - [{this.props.orders[0].created_hours}:00 - {this.props.orders[0].created_hours+1}:00]</p>
+            <p>Pedidos de Nº {this.props.orders.map((order, index) => {
+              if (index === 0)
+                return ` ${order.id}`;
+              else 
+                return `, ${order.id}`;
+            })} <br></br>
+            </p>
           </header>
 
           <main>
@@ -45,9 +50,18 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
               </div>
 
               <div className="order-print-info">
-                <p>TOTAL A PAGAR: <span>R$ {this.props.orders[0].cost.toFixed(2).split('.').join(',')}</span></p>
-                <p>PAGAMENTO PRÉVIO: R$ {this.props.orders[0].payment_made.toFixed(2).split('.').join(',')}</p>
-                <p>DATA RETIRADA: {this.props.orders[0].delivery_date.split('-').reverse().join('/')}</p>
+                <p>TOTAL A PAGAR: <span>R$ {
+                  this.props.orders.map(order => order.cost)
+                  .reduce((previous, next) => previous + next)
+                  .toFixed(2).split('.').join(',')
+                }</span></p>
+                <p>PAGAMENTO PRÉVIO: R$ {
+                  this.props.orders
+                  .map(order => order.payment_made)
+                  .reduce((previous, next) => previous + next)
+                  .toFixed(2).split('.').join(',')
+                  }</p>
+              
               </div>
             </div>
 
@@ -79,7 +93,7 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
                 ))}
               </tbody>
             </table>
-            <span>Total de peças: {this.props.orders[0].item_quantity}</span>
+            <span>Total de peças: {this.props.orders.map(order => order.item_quantity).reduce((previous, next) => previous + next)}</span>
           </main>
 
           <footer>
@@ -109,8 +123,13 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
               (88) 99740-5747</p>  
             </div>
 
-            <p>Pedido Avulso Nº {this.props.orders[0].id} <br></br>
-            {this.props.orders[0].created_at} - [{this.props.orders[0].created_hours}:00 - {this.props.orders[0].created_hours+1}:00]</p>
+            <p>Pedidos de Nº {this.props.orders.map((order, index) => {
+              if (index === 0)
+                return ` ${order.id}`;
+              else 
+                return `, ${order.id}`;
+            })} <br></br>
+            </p>
           </header>
 
           <main>
@@ -122,9 +141,18 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
               </div>
 
               <div className="order-print-info">
-                <p>TOTAL A PAGAR: <span>R$ {this.props.orders[0].cost.toFixed(2).split('.').join(',')}</span></p>
-                <p>PAGAMENTO PRÉVIO: R$ {this.props.orders[0].payment_made.toFixed(2).split('.').join(',')}</p>
-                <p>DATA RETIRADA: {this.props.orders[0].delivery_date.split('-').reverse().join('/')}</p>
+                <p>TOTAL A PAGAR: <span>R$ {
+                  this.props.orders.map(order => order.cost)
+                  .reduce((previous, next) => previous + next)
+                  .toFixed(2).split('.').join(',')
+                }</span></p>
+                <p>PAGAMENTO PRÉVIO: R$ {
+                  this.props.orders
+                  .map(order => order.payment_made)
+                  .reduce((previous, next) => previous + next)
+                  .toFixed(2).split('.').join(',')
+                  }</p>
+              
               </div>
             </div>
 
@@ -156,7 +184,7 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
                 ))}
               </tbody>
             </table>
-            <span>Total de peças: {this.props.orders[0].item_quantity}</span>
+            <span>Total de peças: {this.props.orders.map(order => order.item_quantity).reduce((previous, next) => previous + next)}</span>
           </main>
 
           <footer>
