@@ -292,7 +292,8 @@ export default function CreateOrder() {
       customer_id: customerId,
       item_added: itemAdded
     }).then(response => {
-      if (response.status === 201) {
+      if (response.status === 200) {
+        const orderIdCreated = response.data;
         setCustomerId('');
         setPaymentType({value: '1', label: 'Dinheiro'});
         setPaymentMoment({value: '1', label: 'Retirada'});
@@ -324,6 +325,7 @@ export default function CreateOrder() {
 
           setTimeout(() => {
             submitMessage.id = '';
+            window.open(`/download?orderId=${orderIdCreated}`, '_blank');
           }, 2000);
         }
       }

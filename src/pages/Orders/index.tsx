@@ -131,7 +131,7 @@ export default function Orders() {
             </div>
 
             <div class="order-actions" id=${orders[i].id}>
-              <button>Imprimir</button>
+              <a href="/download?orderId=${orders[i].id}" target="_blank"><button>Imprimir</button></a>
               <a href="/make-payment/${orders[i].id}"><button>Realizar pagamento</button></a>
             </div>
           </div>`

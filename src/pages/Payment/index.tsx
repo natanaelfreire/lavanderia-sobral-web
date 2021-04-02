@@ -58,8 +58,14 @@ export default function Payment() {
     const searchCustomerId = new URLSearchParams(search).get('customerId');
 
     api.get(`customers/${searchCustomerId}`).then(response => {
-      if (response.status === 200)
+      if (response.status === 200) {
         setInputName(response.data.name);
+
+        const notPaidFilter = document.getElementsByClassName('not-paid-filter')[0];
+
+        if (notPaidFilter)
+          notPaidFilter.innerHTML += `<a href="/download?customerId=${searchCustomerId}" target="_blank"><button class="print-all-pendences">Imprimir todas as pendências</button></a>`;
+      }
     })
   }, [search]);
 
