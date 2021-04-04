@@ -57,7 +57,7 @@ export default function Payment() {
   useEffect(() => {
     const searchCustomerId = new URLSearchParams(search).get('customerId');
 
-    api.get(`customers/${searchCustomerId}`).then(response => {
+    if (searchCustomerId) api.get(`customers/${searchCustomerId}`).then(response => {
       if (response.status === 200) {
         setInputName(response.data.name);
 

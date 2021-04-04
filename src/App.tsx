@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.css';
 
-import Routes from './routes';
+import Routes from './routes/index';
+import { AuthProvider } from './contexts/auth';
 
 function App() {
   return (
-    <Routes />
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
   );
 }
 
