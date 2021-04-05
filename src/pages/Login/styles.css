@@ -1,0 +1,34 @@
+.page-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20vh;
+}
+
+.page-login .main-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background: #fff;
+  width: 400px;
+  height: 300px;
+}
+
+.page-login form {
+  margin-top: 20px;
+}
+
+.page-login #user, .page-login #password {
+  margin-left: 8px;
+  height: 30px;
+  font-size: 16px;
+}
+
+.page-login button {
+  margin-top: 10px;
+  width: 100px;
+  height: 50px;
+  font-size: 15px;
+}

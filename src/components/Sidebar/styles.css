@@ -13,7 +13,10 @@
 }
 
 .sidebar .div-logo {
-  width: 100%;
+  background: #ffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar .create-order {

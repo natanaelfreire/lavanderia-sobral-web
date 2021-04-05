@@ -19,7 +19,7 @@ interface Item {
   unit_discount: number;
   unit_quantity: number;
   unit_subtotal: number;
-}
+};
 
 interface Order {
   id: number;
@@ -38,18 +38,27 @@ interface Order {
   date_out_number: number;
   created_hours: number;
   customer_id: number; 
-}
+};
 
 interface Customer {
   value: string;
   label: string;
-}
+};
+
+interface FilteredCustomer {
+  [id: string]: {
+    name: string;
+    address: string;
+    phone: string;
+  }
+};
 
 export default function Orders() {
   const [ customerId, setCustomerId ] = useState('');
   const [ orderId, setOrderId ] = useState('');
   const [ paymentStatus, setPaymentStatus ] = useState<{value: string; label: string;}>();
   const [ orderStatus, setOrderStatus ] = useState<{value: string; label: string;}>();
+  const [ filteredOrders, setFilteredOrders ] = useState<{orders: Order[], itemAddedByOrderId: Item[][], customerByOrderId: FilteredCustomer}>();
 
   const [ dateStart, setDateStart ] = useState('');
   const [ dateEnd, setDateEnd ] = useState('');
@@ -65,113 +74,9 @@ export default function Orders() {
     { value: '2', label: 'Coletado' }
   ]);
   
-
   const search = useLocation().search;
   const searchCustomerId = new URLSearchParams(search).get('customerId');
   const searchOrderId = new URLSearchParams(search).get('orderId');
-
-  const displayContent = async (content: {orders: Order[], itemAddedByOrderId: Item[][]}) => {
-    const { orders, itemAddedByOrderId } = content;
-    const displayOrders = document.getElementsByClassName('display-orders')[0];
-
-    if (orders.length === 0) return displayOrders.innerHTML = '<p class="no-orders-found">Não foi encontrado nenhum pedido.</p>';
-
-    displayOrders.innerHTML = 
-    `<div class="head-order-field">
-      <p class="order-info">Pedido</p>
-      <p class="customer-info">Cliente</p>
-      <p class="delivery-date">Data da Retirada</p>
-      <p class="additional-info">Infos Adicionais</p>
-      <p class="order-actions-head">Ações</p>
-    </div>`;
-
-    for (let i = 0; i < orders.length; i++) {
-      const items = itemAddedByOrderId[orders[i].id];
-      let displayItems = ''; 
-      if (items) items.forEach(item => {
-        displayItems += `<p>${item.unit_quantity}x ${item.description} - disc.${item.unit_discount} - R$${item.unit_subtotal.toFixed(2).split('.').join(',')}</p>`;
-      });
-
-      await api.get(`customers/${orders[i].customer_id}`).then(response => {
-        if (response.status === 200) {
-          const customer: {
-            name: string;
-            phone: string;
-            address: string
-          } = response.data;
-
-          displayOrders.innerHTML = displayOrders.innerHTML + 
-          `<div class="order-field">
-            <div class="order-info">
-              <p class=${orders[i].payment_status === 'Não pago' ? "payment-status-not-paid": orders[i].payment_status === 'Pago' ? "payment-status-paid" : "payment-status-partially"}>${orders[i].payment_status.toUpperCase()}</p>
-              <p><span>Cód do pedido: </span>${orders[i].id}</p>
-              <p><span>Criado em: </span>${orders[i].created_at}</p>
-              <p>-----------------------------------</p>
-              ${displayItems}
-              <p>-----------------------------------</p>
-              <p><span>Subtotal: </span>R$${orders[i].subtotal.toFixed(2).split('.').join(',')}</p>
-              <p><span>Disconto aplicado: </span>${orders[i].discount.toFixed(2).split('.').join(',')}</p>
-              <p><span>Pagamento efetuado: </span>R$${orders[i].payment_made.toFixed(2).split('.').join(',')}</p>
-              <p><span>${orders[i].payment_status === 'Parcialmente pago'? "Falta pagar: " : "Total a pagar: "}</span>R$${orders[i].cost.toFixed(2).split('.').join(',')}</p>
-            </div>
-
-            <div class="customer-info">
-              <p><span>${customer.name.toUpperCase()}</span></p>
-              <p><span>Endereço: </span>${customer.address}</p>
-              <p><span>Telefone: </span>${customer.phone}</p>
-            </div>
-
-            <div class="delivery-date">
-              <p>${orders[i].delivery_date.split('-').reverse().join('/')}</p>
-            </div>
-
-            <div class="additional-info">
-              <p class=${orders[i].order_status === 'Pendente' ? "order-status-pending" : "order-status-collected"}>${orders[i].order_status}</p>
-              <p><span>Tipo pagamento: </span>${orders[i].payment_type}</p>
-            </div>
-
-            <div class="order-actions" id=${orders[i].id}>
-              <a href="/download?orderId=${orders[i].id}" target="_blank"><button>Imprimir</button></a>
-              <a href="/make-payment/${orders[i].id}"><button>Realizar pagamento</button></a>
-            </div>
-          </div>`
-        
-        }
-      });
-
-    }
-
-    const orderActions = document.getElementsByClassName('order-actions');
-    
-    Array.from(orderActions).forEach(element => {
-      if (element.children.length !== 4) {
-        const changeStatusButton = document.createElement('button');
-        changeStatusButton.textContent = "Alterar status";
-        changeStatusButton.onclick = async function () {
-          if (window.confirm('Confirmar alteração de status?')) await api.patch(`/orders/${element.id}`, {
-            order_status: 'Coletado'
-          }).then(response => {
-            if (response.status === 200) {
-              handleOrdersFilterClick();
-            }
-          });
-        }
-        element.appendChild(changeStatusButton);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = "Cancelar / Excluir";
-        deleteButton.onclick = async function () {
-          if (window.confirm('Deseja excluir pedido?')) await api.delete(`/orders/${element.id}`).then(response => {
-            if (response.status === 204) {
-              handleOrdersFilterClick();
-            }
-          });
-        }
-        element.appendChild(deleteButton);
-      }
-    })
-      
-  }
 
   useEffect(() => {
     api.get('customers').then(response => {
@@ -207,7 +112,7 @@ export default function Orders() {
       }).then(response => {
         if (response.status === 200) {
           const data = response.data;
-          displayContent(data);
+          setFilteredOrders(data);
         }
       })
     }
@@ -222,7 +127,7 @@ export default function Orders() {
       }).then(response => {
         if (response.status === 200) {
           const data = response.data;
-          displayContent(data);
+          setFilteredOrders(data);
         }
       })
     }
@@ -240,8 +145,8 @@ export default function Orders() {
       }
     }).then(response => {
       if (response.status === 200) {
-        const data = response.data;
-        displayContent(data);
+        const data = response.data;       
+        setFilteredOrders(data);
       }
     });
   }
@@ -341,7 +246,72 @@ export default function Orders() {
         >Filtrar</button>
 
         <div className="display-orders">
+          {filteredOrders? (<div>
+            <div className="head-order-field">
+              <p className="order-info">Pedido</p>
+              <p className="customer-info">Cliente</p>
+              <p className="delivery-date">Data da Retirada</p>
+              <p className="additional-info">Infos Adicionais</p>
+              <p className="order-actions-head">Ações</p>
+            </div>
 
+            {filteredOrders.orders.map(order => (
+                <div className="order-field" key={order.id}>
+                  <div className="order-info">
+                    <p className={order.payment_status === 'Não pago' ? "payment-status-not-paid": order.payment_status === 'Pago' ? "payment-status-paid" : "payment-status-partially"}>{order.payment_status.toUpperCase()}</p>
+                    <p><span>Cód do pedido: </span>{order.id}</p>
+                    <p><span>Criado em: </span>{order.created_at}</p>
+                    <p>-----------------------------------</p>
+                      {filteredOrders.itemAddedByOrderId[order.id].map(item => (
+                        <p key={item.item_id}>{item.unit_quantity}x {item.description} - disc.{item.unit_discount} - R${item.unit_subtotal.toFixed(2).split('.').join(',')}</p>
+                      ))}
+                    <p>-----------------------------------</p>
+                    <p><span>Subtotal: </span>R${order.subtotal.toFixed(2).split('.').join(',')}</p>
+                    <p><span>Disconto aplicado: </span>{order.discount.toFixed(2).split('.').join(',')}</p>
+                    <p><span>Pagamento efetuado: </span>R${order.payment_made.toFixed(2).split('.').join(',')}</p>
+                    <p><span>{order.payment_status === 'Parcialmente pago'? "Falta pagar: " : "Total a pagar: "}</span>R${order.cost.toFixed(2).split('.').join(',')}</p>
+                  </div>
+                  
+                  <div className="customer-info">
+                    <p><span>{filteredOrders.customerByOrderId[String(order.id)].name.toUpperCase()}</span></p>
+                    <p><span>Endereço: </span>{filteredOrders.customerByOrderId[String(order.id)].address}</p>
+                    <p><span>Telefone: </span>{filteredOrders.customerByOrderId[String(order.id)].phone}</p>
+                  </div>
+
+                  <div className="delivery-date">
+                    <p>{order.delivery_date.split('-').reverse().join('/')}</p>
+                  </div>
+
+                  <div className="additional-info">
+                    <p className={order.order_status === 'Pendente' ? "order-status-pending" : "order-status-collected"}>{order.order_status}</p>
+                    <p><span>Tipo pagamento: </span>{order.payment_type}</p>
+                  </div>
+
+                  <div className="order-actions" id={String(order.id)}>
+                    <a href={"/download?orderId=" + order.id} target="_blank" rel="noreferrer"><button>Imprimir</button></a>
+                    <button onClick={async () => {
+                      if (window.confirm('Confirmar alteração de status?')) await api.patch(`/orders/${order.id}`, {
+                        order_status: 'Coletado'
+                      }).then(response => {
+                        if (response.status === 200) {
+                          handleOrdersFilterClick();
+                        }
+                      })
+                    }}>Alterar status</button>
+                    <a href={"/make-payment/" + order.id}><button>Realizar pagamento</button></a>
+                    <button onClick={async () => {
+                      if (window.confirm('Deseja excluir pedido?')) await api.delete(`/orders/${order.id}`).then(response => {
+                        if (response.status === 204) {
+                          handleOrdersFilterClick();
+                        }
+                      });
+                    }}>Cancelar / Excluir</button>
+                  </div>
+                </div>
+              )
+
+            )}
+          </div>) : <p className="no-orders-found">Não foi encontrado nenhum pedido.</p>}
         </div>
         
       </main>
