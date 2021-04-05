@@ -1,5 +1,12 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, CSSProperties, useEffect, useState } from 'react';
 import * as auth from '../services/auth';
+
+const styles: CSSProperties = {
+  height: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}
 
 interface AuthContextData {
   signed: boolean;
@@ -11,6 +18,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [ user, setUser ] = useState<object | null>(null);
+  const [ loading, setLoading ] = useState(true);
 
   useEffect(() => {
     const storageUser = localStorage.getItem('@lavanderia:user');
@@ -19,8 +27,23 @@ export const AuthProvider: React.FC = ({ children }) => {
     if (storageUser && storageToken) {
       // api.defaults.headers['Authorization'] = `Bearer ${storageToken}`;
       setUser(JSON.parse(storageUser));
+      setLoading(false);
     }
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000)
   }, []);
+
+  if (loading) {
+    return (
+      <div style={styles}>
+        <main>
+          <h1>Carregando...</h1>
+        </main>
+      </div>
+    );
+  }
 
   async function signIn(user: string, password: string) {
     const response = await auth.signIn(user, password);

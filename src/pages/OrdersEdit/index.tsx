@@ -333,7 +333,7 @@ function OrderEdit() {
                   <td>
                     <button type="button" className="delete-button" onClick={() => {
                       const newItems: Item[] = [];
-                      items.map((item, indexItem) => {
+                      items.forEach(function(item, indexItem) {
                         if (indexItem !== index)
                           newItems.push(item);
                       });
