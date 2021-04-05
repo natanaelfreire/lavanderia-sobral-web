@@ -289,15 +289,7 @@ export default function Orders() {
 
                   <div className="order-actions" id={String(order.id)}>
                     <a href={"/download?orderId=" + order.id} target="_blank" rel="noreferrer"><button>Imprimir</button></a>
-                    <button onClick={async () => {
-                      if (window.confirm('Confirmar alteração de status?')) await api.patch(`/orders/${order.id}`, {
-                        order_status: 'Coletado'
-                      }).then(response => {
-                        if (response.status === 200) {
-                          handleOrdersFilterClick();
-                        }
-                      })
-                    }}>Alterar status</button>
+                    <a href={`/orders-edit/${order.id}`}><button>Editar peças</button></a>
                     <a href={"/make-payment/" + order.id}><button>Realizar pagamento</button></a>
                     <button onClick={async () => {
                       if (window.confirm('Deseja excluir pedido?')) await api.delete(`/orders/${order.id}`).then(response => {

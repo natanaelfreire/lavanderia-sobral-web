@@ -16,12 +16,22 @@ export default function Login() {
   return (
     <div className="page-login">
       <div className="main-content">
-        <header>Login - Lavanderia Sobral</header>
+        <h2>LOGIN</h2>
         <form>
-          <label htmlFor="user">Usuário: </label>
-          <input type="text" id="user" value={userInput} onChange={e => setUserInput(e.target.value)} required/>
-          <label htmlFor="password">Senha: </label>
-          <input type="password" id="password" value={passwordInput} onChange={e => setPasswordInput(e.target.value)} required/><br></br>
+          <input 
+            type="text" 
+            id="user" 
+            value={userInput} 
+            onChange={e => setUserInput(e.target.value)} 
+            placeholder="Usuário"
+          />
+          <input 
+            type="password" 
+            id="password" 
+            value={passwordInput} 
+            onChange={e => setPasswordInput(e.target.value)} 
+            placeholder="Senha"
+          /><br></br>
           <button onClick={handleLogin}>Entrar</button>
         </form>
       </div>

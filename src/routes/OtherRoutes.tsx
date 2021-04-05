@@ -12,6 +12,7 @@ import Payment from '../pages/Payment';
 import MakePayment from '../pages/MakePayment';
 import Processing from '../pages/Processing';
 import DownloadPdf from '../pages/DownloadPdf';
+import OrderEdit from '../pages/OrdersEdit';
 
 export default function OtherRoutes() {
   return (
@@ -24,6 +25,7 @@ export default function OtherRoutes() {
         <Route path="/customers-edit/:id" component={CustomerEdit} />
         <Route path="/items-edit/:id" component={ItemsEdit} />
         <Route path="/orders" component={Orders} />
+        <Route path="/orders-edit/:id" component={OrderEdit} />
         <Route path="/payment" component={Payment} />
         <Route path="/make-payment/:id" component={MakePayment} />
         <Route path="/processing" component={Processing} />
