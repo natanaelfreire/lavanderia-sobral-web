@@ -22,7 +22,7 @@ export default function displayContentItems(content: Item[]) {
     `<div class="body-table-items" id=${item.id}>
       <input class="item-code" value=${item.id} readonly></input>
       <p class="item-description">${item.description}</p>
-      <input class="item-cost" value=${item.cost.toFixed(2).split('.').join(',')} readonly></input>
+      <input class="item-cost" value=${Number(item.cost).toFixed(2).split('.').join(',')} readonly></input>
       <p class="item-actions" id=${item.id}>
         <a href="/items-edit/${item.id}"><button type="button">Editar</button></a>
       </p>
