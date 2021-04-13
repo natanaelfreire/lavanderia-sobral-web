@@ -4,9 +4,6 @@ import axios from 'axios';
 
 const apiAuthorization = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    'Access-Control-Allow-Origin': '*'
-  }
 });
 
 const styles: CSSProperties = {
