@@ -255,7 +255,7 @@ export default function Orders() {
               <p className="order-actions-head">Ações</p>
             </div>
 
-            {filteredOrders.orders.map(order => (
+            {filteredOrders.orders.length !== 0 ? filteredOrders.orders.map(order => (
                 <div className="order-field" key={order.id}>
                   <div className="order-info">
                     <p className={order.payment_status === 'Não pago' ? "payment-status-not-paid": order.payment_status === 'Pago' ? "payment-status-paid" : "payment-status-partially"}>{order.payment_status.toUpperCase()}</p>
@@ -302,7 +302,7 @@ export default function Orders() {
                 </div>
               )
 
-            )}
+            ) : <p className="no-orders-found">Não foi encontrado nenhum pedido.</p>}
           </div>) : <p className="no-orders-found">Não foi encontrado nenhum pedido.</p>}
         </div>
         
