@@ -230,7 +230,7 @@ function OrderEdit() {
             name="unit-value"
             inputType="number"
             readOnly
-            value={unitCost.toFixed(2)}
+            value={unitCost}
           />
       
           <Input 
@@ -267,7 +267,7 @@ function OrderEdit() {
             name="unit-sutotal" 
             inputType="number"
             readOnly
-            value={unitSubtotal.toFixed(2)}
+            value={unitSubtotal}
           />
 
           <button 
@@ -376,7 +376,7 @@ function OrderEdit() {
             label="Subtotal: " 
             name="subtotal" 
             inputType="number"
-            value={subtotal.toFixed(2)} 
+            value={subtotal} 
             readOnly
           />
           <Input 
@@ -410,7 +410,7 @@ function OrderEdit() {
             label="Total: " 
             name="total" 
             inputType="number" 
-            value={total.toFixed(2)}
+            value={total}
             readOnly
           />
         </div>
