@@ -1,6 +1,10 @@
 import React, { createContext, CSSProperties, useEffect, useState } from 'react';
-import api from '../services/api';
 import * as auth from '../services/auth';
+import axios from 'axios';
+
+const apiAuthorization = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
 
 const styles: CSSProperties = {
   height: '100vh',
@@ -26,7 +30,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     const storageToken = localStorage.getItem('@lavanderia:token');
 
     async function getOriginalToken() {
-      api.post('session', {
+      apiAuthorization.post('session', {
         user: storageUser? JSON.parse(storageUser).name : null
       }).then(response => {
         if (response.status === 200) {
