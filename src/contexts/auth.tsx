@@ -51,6 +51,10 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   if (loading) {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
     return (
       <div style={styles}>
         <main>

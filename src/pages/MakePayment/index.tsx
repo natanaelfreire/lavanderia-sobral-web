@@ -111,7 +111,7 @@ export default function MakePayment() {
         item_quantity: order.item_quantity,
         subtotal: order.subtotal,
         discount: order.discount,
-        payment_made: order.payment_made + Number(payment),
+        payment_made: Number(order.payment_made) + Number(payment),
         cost: newCost,
         created_at: order.created_at,
         date_number: order.date_number,

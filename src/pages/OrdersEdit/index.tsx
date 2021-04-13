@@ -100,15 +100,15 @@ function OrderEdit() {
   }, [id]);
 
   useEffect(() => {
-    if ((paymentMade !== 0) && (total === 0)) {
+    if ((Number(paymentMade) !== 0) && (total === 0)) {
       setPaymentStatus('Pago');
     }
 
-    if (paymentMade !== 0 && (total !== 0)) {
+    if (Number(paymentMade) !== 0 && (total !== 0)) {
       setPaymentStatus('Parcialmente pago');
     }
 
-    if (paymentMade === 0) {
+    if (Number(paymentMade) === 0) {
       setPaymentStatus('Não pago');
     }
   }, [paymentMade, total, subtotal, discount]);
@@ -116,7 +116,7 @@ function OrderEdit() {
   function handlePlusClick() {
     if (itemId) {
       const newItemQuantity = itemQuantity + unitQuantity;
-      const newSubtotal = subtotal + unitSubtotal;
+      const newSubtotal = Number(subtotal) + unitSubtotal;
       setItemQuantity(newItemQuantity);
       setSubtotal(newSubtotal);
       setTotal(newSubtotal);
@@ -320,16 +320,16 @@ function OrderEdit() {
                     {item.observation}
                   </td>
                   <td>
-                    {String(item.unit_quantity)}
+                    {Number(item.unit_quantity).toFixed(0)}
                   </td>
                   <td>
-                    {String(item.unit_cost)}
+                    {Number(item.unit_cost).toFixed(2).split('.').join(',')}
                   </td>
                   <td>
-                    {String(item.unit_discount)}
+                    {Number(item.unit_discount).toFixed(2).split('.').join(',')}
                   </td>
                   <td>
-                    {String(item.unit_subtotal)}
+                    {Number(item.unit_subtotal).toFixed(2).split('.').join(',')}
                   </td>
                   <td>
                     <button type="button" className="delete-button" onClick={() => {
@@ -369,7 +369,7 @@ function OrderEdit() {
             label="Qntde. peças: " 
             name="item-quantity" 
             inputType="number" 
-            value={itemQuantity}
+            value={Number(itemQuantity).toFixed(0)}
             readOnly
           />
           <Input 
@@ -389,7 +389,7 @@ function OrderEdit() {
             onChange={e => {
               const newDiscount = Number(e.target.value.split(',').join('.'));
               setDiscount(newDiscount);
-              setTotal(subtotal - (newDiscount + paymentMade));
+              setTotal(Number(subtotal) - (newDiscount + Number(paymentMade)));
             }}
             min={0}
           />
@@ -402,7 +402,7 @@ function OrderEdit() {
             onChange={e => {
               const newPaymentMade = Number(e.target.value.split(',').join('.'));
               setPaymentMade(newPaymentMade);
-              setTotal(subtotal - (newPaymentMade + discount));
+              setTotal(Number(subtotal) - (newPaymentMade + Number(discount)));
             }}
             min={0}
           />
