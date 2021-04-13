@@ -26,19 +26,21 @@ export const AuthProvider: React.FC = ({ children }) => {
     const storageToken = localStorage.getItem('@lavanderia:token');
 
     async function getOriginalToken() {
-      const originalToken: {
-        user: string;
-        token: string;
-      } = await api.post('session', {
+      await api.post('session', {
         user: storageUser
-      });
+      }).then(response => {
+        if (response.status === 200) {
+          const originalToken: {
+            user: string;
+            token: string;
+          } = response.data;
 
-      console.log(originalToken)
-
-      if (originalToken.token === storageToken) {
-        if (storageUser) setUser(JSON.parse(storageUser));
-        setLoading(false);
-      }
+          if (originalToken.token === storageToken) {
+            if (storageUser) setUser(JSON.parse(storageUser));
+            setLoading(false);
+          }
+        }
+      })
     }
 
     if (storageUser && storageToken) {
