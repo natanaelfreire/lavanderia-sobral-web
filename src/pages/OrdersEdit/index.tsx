@@ -115,13 +115,6 @@ function OrderEdit() {
 
   function handlePlusClick() {
     if (itemId) {
-      setItemId('');
-      setObservation('');
-      setUnitCost(0);
-      setUnitQuantity(1);
-      setUnitDiscount(0);
-      setUnitSubtotal(0);
-
       const newItemQuantity = itemQuantity + unitQuantity;
       const newSubtotal = subtotal + unitSubtotal;
       setItemQuantity(newItemQuantity);
@@ -139,7 +132,15 @@ function OrderEdit() {
         unit_subtotal: unitSubtotal,
         order_id: id
       });
+      
       setItems(newArrayOfItemAdded);
+
+      setItemId('');
+      setObservation('');
+      setUnitCost(0);
+      setUnitQuantity(1);
+      setUnitDiscount(0);
+      setUnitSubtotal(0);
     }
     else {
       alert('Selecione uma peça antes de adicionar!');
