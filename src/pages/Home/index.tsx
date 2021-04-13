@@ -6,11 +6,6 @@ import LogoWithoutBg from '../../assets/images/logo-removebg.png';
 import './styles.css';
 
 export default function Home() {
-
-  useEffect(() => {
-    window.location.reload();
-  }, []);
-
   return (
     <div className="page-home">
 
