@@ -45,8 +45,8 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
               </div>
 
               <div className="order-print-info">
-                <p>TOTAL A PAGAR: <span>R$ {this.props.orders[0].cost.toFixed(2).split('.').join(',')}</span></p>
-                <p>PAGAMENTO PRÉVIO: R$ {this.props.orders[0].payment_made.toFixed(2).split('.').join(',')}</p>
+                <p>TOTAL A PAGAR: <span>R$ {Number(this.props.orders[0].cost).toFixed(2).split('.').join(',')}</span></p>
+                <p>PAGAMENTO PRÉVIO: R$ {Number(this.props.orders[0].payment_made).toFixed(2).split('.').join(',')}</p>
                 <p>DATA RETIRADA: {this.props.orders[0].delivery_date.split('-').reverse().join('/')}</p>
               </div>
             </div>
@@ -71,9 +71,9 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
                         <td>{item.description.toUpperCase()}</td>
                         <td>{item.observation}</td>
                         <td className="print-numeric-data">{item.unit_quantity}</td>
-                        <td className="print-numeric-data">{item.unit_cost.toFixed(2).split('.').join(',')}</td>
-                        <td className="print-numeric-data">{item.unit_discount.toFixed(2).split('.').join(',')}</td>
-                        <td className="print-numeric-data">{item.unit_subtotal.toFixed(2).split('.').join(',')}</td>
+                        <td className="print-numeric-data">{Number(item.unit_cost).toFixed(2).split('.').join(',')}</td>
+                        <td className="print-numeric-data">{Number(item.unit_discount).toFixed(2).split('.').join(',')}</td>
+                        <td className="print-numeric-data">{Number(item.unit_subtotal).toFixed(2).split('.').join(',')}</td>
                       </tr>
                     ))
                 ))}
@@ -122,8 +122,8 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
               </div>
 
               <div className="order-print-info">
-                <p>TOTAL A PAGAR: <span>R$ {this.props.orders[0].cost.toFixed(2).split('.').join(',')}</span></p>
-                <p>PAGAMENTO PRÉVIO: R$ {this.props.orders[0].payment_made.toFixed(2).split('.').join(',')}</p>
+                <p>TOTAL A PAGAR: <span>R$ {Number(this.props.orders[0].cost).toFixed(2).split('.').join(',')}</span></p>
+                <p>PAGAMENTO PRÉVIO: R$ {Number(this.props.orders[0].payment_made).toFixed(2).split('.').join(',')}</p>
                 <p>DATA RETIRADA: {this.props.orders[0].delivery_date.split('-').reverse().join('/')}</p>
               </div>
             </div>
@@ -148,9 +148,9 @@ export class ComponentToPrint extends React.PureComponent<Props, {}> {
                         <td>{item.description.toUpperCase()}</td>
                         <td>{item.observation}</td>
                         <td className="print-numeric-data">{item.unit_quantity}</td>
-                        <td className="print-numeric-data">{item.unit_cost.toFixed(2).split('.').join(',')}</td>
-                        <td className="print-numeric-data">{item.unit_discount.toFixed(2).split('.').join(',')}</td>
-                        <td className="print-numeric-data">{item.unit_subtotal.toFixed(2).split('.').join(',')}</td>
+                        <td className="print-numeric-data">{Number(item.unit_cost).toFixed(2).split('.').join(',')}</td>
+                        <td className="print-numeric-data">{Number(item.unit_discount).toFixed(2).split('.').join(',')}</td>
+                        <td className="print-numeric-data">{Number(item.unit_subtotal).toFixed(2).split('.').join(',')}</td>
                       </tr>
                     ))
                 ))}
