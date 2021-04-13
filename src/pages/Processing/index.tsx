@@ -53,33 +53,38 @@ export default function Processing() {
     const optionSelected = document.querySelector('#style-selected');
     const className =  optionSelected?.getAttribute('class');
 
-    if (calendarStart && calendarEnd) {
-      api.get('orders', {
-        params: {
-          dateStart: calendarStart,
-          dateEnd: calendarEnd,
-          outOrders: true
-        }
-      }).then(response => {
-        if (response.status === 200) {
-          setFilteredOutOrders(response.data);
-          if (className === 'ordersOut') displayOrdersProcessing(response.data);
-        }         
-      });
-      
-      api.get('orders', {
-        params: {
-          dateStart: calendarStart,
-          dateEnd: calendarEnd
-        }
-      }).then(response => {
-        if (response.status === 200) {
-          const { orders } = response.data;
-          setFilteredInOrders(orders);
-          if (className === 'ordersIn') displayOrdersProcessing(orders);
-        }
-      });
+    async function loadOrders() {
+      if (calendarStart && calendarEnd) {
+        api.get('orders', {
+          params: {
+            dateStart: calendarStart,
+            dateEnd: calendarEnd,
+            outOrders: true
+          }
+        }).then(response => {
+          if (response.status === 200) {
+            setFilteredOutOrders(response.data);
+            if (className === 'ordersOut') displayOrdersProcessing(response.data);
+          }         
+        });
+        
+        api.get('orders', {
+          params: {
+            dateStart: calendarStart,
+            dateEnd: calendarEnd
+          }
+        }).then(response => {
+          if (response.status === 200) {
+            const { orders } = response.data;
+            setFilteredInOrders(orders);
+            if (className === 'ordersIn') displayOrdersProcessing(orders);
+          }
+        });
+      }
     }
+
+    loadOrders();
+
   }, [calendarStart, calendarEnd]);
 
   function handleInClick() {
