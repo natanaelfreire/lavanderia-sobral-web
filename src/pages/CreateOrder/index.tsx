@@ -146,9 +146,9 @@ export default function CreateOrder() {
       newTds[2].className = "observation-td";
       newTds[2].innerHTML = observation;
       newTds[3].innerHTML = String(unitQuantity);
-      newTds[4].innerHTML = String(unitCost.toFixed(2)).split('.').join(',');
-      newTds[5].innerHTML = String(unitDiscount.toFixed(2)).split('.').join(',');
-      newTds[6].innerHTML = String(unitSubtotal.toFixed(2)).split('.').join(',');
+      newTds[4].innerHTML = String(Number(unitCost).toFixed(2)).split('.').join(',');
+      newTds[5].innerHTML = String(Number(unitDiscount).toFixed(2)).split('.').join(',');
+      newTds[6].innerHTML = String(Number(unitSubtotal).toFixed(2)).split('.').join(',');
       newTds[7].appendChild(deleteButton);
 
       const newTr = document.createElement('tr');
@@ -434,7 +434,7 @@ export default function CreateOrder() {
             name="unit-value"
             inputType="number"
             readOnly
-            value={unitCost.toFixed(2)}
+            value={Number(unitCost).toFixed(2)}
           />
       
           <Input 
@@ -471,7 +471,7 @@ export default function CreateOrder() {
             name="unit-sutotal" 
             inputType="number"
             readOnly
-            value={unitSubtotal.toFixed(2)}
+            value={Number(unitSubtotal).toFixed(2)}
           />
 
           <button 
@@ -529,7 +529,7 @@ export default function CreateOrder() {
             label="Subtotal: " 
             name="subtotal" 
             inputType="number"
-            value={subtotal.toFixed(2)} 
+            value={Number(subtotal).toFixed(2)} 
             readOnly
           />
           <Input 
@@ -563,7 +563,7 @@ export default function CreateOrder() {
             label="Total: " 
             name="total" 
             inputType="number" 
-            value={total.toFixed(2)}
+            value={Number(total).toFixed(2)}
             readOnly
           />
         </div>
