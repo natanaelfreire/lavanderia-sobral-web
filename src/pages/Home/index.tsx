@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-
 import Sidebar from '../../components/Sidebar';
 import LogoWithoutBg from '../../assets/images/logo-removebg.png';
 
