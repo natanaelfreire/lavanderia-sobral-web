@@ -138,28 +138,28 @@ export default function MakePayment() {
               label="Subtotal: " 
               name="make-payment-subtotal" 
               inputType="number" 
-              value={subtotal.toFixed(2)}
+              value={Number(subtotal).toFixed(2)}
               readOnly
             />
             <Input 
               label="Disconto: " 
               name="make-payment-discount" 
               inputType="number" 
-              value={discount.toFixed(2)}
+              value={Number(discount).toFixed(2)}
               readOnly
             />
             <Input 
               label="Pgto. prévio: " 
               name="make-payment-previous-payment" 
               inputType="number" 
-              value={paymentMade.toFixed(2)}
+              value={Number(paymentMade).toFixed(2)}
               readOnly
             />
             <Input 
               label="Total a pagar: " 
               name="make-payment-cost" 
               inputType="number" 
-              value={cost.toFixed(2)}
+              value={Number(cost).toFixed(2)}
               readOnly
             />
           </div>

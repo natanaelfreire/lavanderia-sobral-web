@@ -88,7 +88,7 @@ export default function Payment() {
         </div>
         <div class="not-paid-info">
           <p>Criado em:<br>${filteredOrders[i].created_at}</p>
-          <p>Pendente de pagamento:<br><span>R$ ${filteredOrders[i].cost.toFixed(2).split('.').join(',')}</span></p>
+          <p>Pendente de pagamento:<br><span>R$ ${Number(filteredOrders[i].cost).toFixed(2).split('.').join(',')}</span></p>
         </div>
         <div class="not-paid-button"> 
           <a href="/make-payment/${filteredOrders[i].id}"><button>Pagar</button></a>

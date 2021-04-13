@@ -263,13 +263,13 @@ export default function Orders() {
                     <p><span>Criado em: </span>{order.created_at}</p>
                     <p>-----------------------------------</p>
                       {filteredOrders.itemAddedByOrderId[order.id].map(item => (
-                        <p key={item.item_id}>{item.unit_quantity}x {item.description} - disc.{item.unit_discount} - R${item.unit_subtotal.toFixed(2).split('.').join(',')}</p>
+                        <p key={item.item_id}>{item.unit_quantity}x {item.description} - disc.{item.unit_discount} - R${Number(item.unit_subtotal).toFixed(2).split('.').join(',')}</p>
                       ))}
                     <p>-----------------------------------</p>
-                    <p><span>Subtotal: </span>R${order.subtotal.toFixed(2).split('.').join(',')}</p>
-                    <p><span>Disconto aplicado: </span>{order.discount.toFixed(2).split('.').join(',')}</p>
-                    <p><span>Pagamento efetuado: </span>R${order.payment_made.toFixed(2).split('.').join(',')}</p>
-                    <p><span>{order.payment_status === 'Parcialmente pago'? "Falta pagar: " : "Total a pagar: "}</span>R${order.cost.toFixed(2).split('.').join(',')}</p>
+                    <p><span>Subtotal: </span>R${Number(order.subtotal).toFixed(2).split('.').join(',')}</p>
+                    <p><span>Disconto aplicado: </span>{Number(order.discount).toFixed(2).split('.').join(',')}</p>
+                    <p><span>Pagamento efetuado: </span>R${Number(order.payment_made).toFixed(2).split('.').join(',')}</p>
+                    <p><span>{order.payment_status === 'Parcialmente pago'? "Falta pagar: " : "Total a pagar: "}</span>R${Number(order.cost).toFixed(2).split('.').join(',')}</p>
                   </div>
                   
                   <div className="customer-info">

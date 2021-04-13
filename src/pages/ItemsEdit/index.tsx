@@ -31,7 +31,7 @@ export default function ItemsEdit() {
         const item: Item = response.data;
 
         setDescription(item.description);
-        setCost(item.cost.toFixed(2));
+        setCost(Number(item.cost).toFixed(2));
       }
     });
   }, [id]);
