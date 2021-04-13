@@ -25,11 +25,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     const storageUser = localStorage.getItem('@lavanderia:user');
     const storageToken = localStorage.getItem('@lavanderia:token');
 
-    if (storageUser) console.log('storageUser: ' + JSON.parse(storageUser))
+    if (storageUser) console.log('storageUser: ' + JSON.parse(storageUser).name)
 
     async function getOriginalToken() {
       api.post('session', {
-        user: storageUser
+        user: storageUser? JSON.parse(storageUser).name : null
       }).then(response => {
         if (response.status === 200) {
           const originalToken: {
