@@ -43,6 +43,4 @@ export default function displayContentItems(content: Item[]) {
 
     element.appendChild(deleteButton);
   })
-
-  window.location.reload();
 }
