@@ -33,6 +33,8 @@ export const AuthProvider: React.FC = ({ children }) => {
         user: storageUser
       });
 
+      console.log(originalToken)
+
       if (originalToken.token === storageToken) {
         if (storageUser) setUser(JSON.parse(storageUser));
         setLoading(false);
