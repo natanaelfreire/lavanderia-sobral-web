@@ -4,7 +4,7 @@ const apiAuthorization = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
-apiAuthorization.defaults.headers['Access-Control-Allow-Origin'] = process.env.REACT_APP_API_URL;
+apiAuthorization.defaults.withCredentials = true;
 
 interface Response {
   token: string;
