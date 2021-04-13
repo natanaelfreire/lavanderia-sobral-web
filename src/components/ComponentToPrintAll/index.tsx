@@ -176,9 +176,9 @@ export class ComponentToPrintAll extends React.PureComponent<Props, {}> {
                         <td>{item.description.toUpperCase()}</td>
                         <td>{item.observation}</td>
                         <td className="print-numeric-data">{item.unit_quantity}</td>
-                        <td className="print-numeric-data">{Number(item.unit_cost.toFixed(2).split('.').join(','))}</td>
-                        <td className="print-numeric-data">{Number(item.unit_discount.toFixed(2).split('.').join(','))}</td>
-                        <td className="print-numeric-data">{Number(item.unit_subtotal.toFixed(2).split('.').join(','))}</td>
+                        <td className="print-numeric-data">{Number(item.unit_cost).toFixed(2).split('.').join(',')}</td>
+                        <td className="print-numeric-data">{Number(item.unit_discount).toFixed(2).split('.').join(',')}</td>
+                        <td className="print-numeric-data">{Number(item.unit_subtotal).toFixed(2).split('.').join(',')}</td>
                       </tr>
                     ))
                 ))}

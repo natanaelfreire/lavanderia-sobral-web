@@ -1,4 +1,5 @@
 import React, { createContext, CSSProperties, useEffect, useState } from 'react';
+import api from '../services/api';
 import * as auth from '../services/auth';
 
 const styles: CSSProperties = {
@@ -24,10 +25,23 @@ export const AuthProvider: React.FC = ({ children }) => {
     const storageUser = localStorage.getItem('@lavanderia:user');
     const storageToken = localStorage.getItem('@lavanderia:token');
 
+    async function getOriginalToken() {
+      const originalToken: {
+        user: string;
+        token: string;
+      } = await api.post('session', {
+        user: storageUser
+      });
+
+      if (originalToken.token === storageToken) {
+        if (storageUser) setUser(JSON.parse(storageUser));
+        setLoading(false);
+      }
+    }
+
     if (storageUser && storageToken) {
       // api.defaults.headers['Authorization'] = `Bearer ${storageToken}`;
-      setUser(JSON.parse(storageUser));
-      setLoading(false);
+      getOriginalToken();      
     }
 
     setTimeout(() => {
