@@ -6,6 +6,8 @@ const apiAuthorization = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
+apiAuthorization.defaults.headers['Access-Control-Allow-Origin'] = process.env.REACT_APP_API_URL;
+
 const styles: CSSProperties = {
   height: '100vh',
   display: 'flex',
