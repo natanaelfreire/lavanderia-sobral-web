@@ -66,3 +66,16 @@
   background-color: #001b30;
   color: #ffff;
 }
+
+.username, .logout {
+  color: #ffff;
+  margin-top: 3px;
+}
+
+.logout {
+  background: none;
+  border: 1px solid #ffff;
+  padding-left: 3px;
+  padding-right: 3px;
+  cursor: pointer;
+}
