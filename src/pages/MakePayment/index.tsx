@@ -88,6 +88,14 @@ export default function MakePayment() {
   }, [id]);
 
   function handleClickPayment() {
+    const saveButton = document.getElementsByClassName('make-payment-button')[0];
+    if (saveButton) {
+      saveButton.setAttribute('disabled', '');
+      setTimeout(() => {
+        saveButton.removeAttribute('disabled');
+      }, 2000);
+    } 
+
     if (order) {
       let newPaymentStatus = order.payment_status;
       let newCost = order.cost;
@@ -133,7 +141,7 @@ export default function MakePayment() {
 
         <div className="make-payment">
           <div className="make-payment-block">
-            <p>Informações</p>
+            <p className="make-payment-section">Informações</p>
             <Input 
               label="Subtotal: " 
               name="make-payment-subtotal" 
@@ -165,7 +173,7 @@ export default function MakePayment() {
           </div>
 
           <div className="make-payment-block actions">
-            <p>Ações</p>
+            <p className="make-payment-section">Ações</p>
             <div>
               <label htmlFor="order-status">Status da coleta: </label>
               <Select

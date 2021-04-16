@@ -55,6 +55,14 @@ export default function Customers() {
 
   function handleCustomerSubmit(event: FormEvent) {
     event.preventDefault();
+    const saveButton = document.getElementsByClassName('save-button')[0];
+    if (saveButton) {
+      saveButton.setAttribute('disabled', '');
+      setTimeout(() => {
+        saveButton.removeAttribute('disabled');
+      }, 2000);
+    } 
+    
     const submitMessage = document.getElementsByClassName('submit-message')[0];
 
     if (!name || !address || !phone) {

@@ -245,6 +245,14 @@ export default function CreateOrder() {
   }
 
   function handleSaveClick() {
+    const saveButton = document.getElementsByClassName('save-button')[0];
+    if (saveButton) {
+      saveButton.setAttribute('disabled', '');
+      setTimeout(() => {
+        saveButton.removeAttribute('disabled');
+      }, 2000);
+    } 
+
     if (!customerId) {
       return alert('Selecione o Cliente antes de salvar.');
     }

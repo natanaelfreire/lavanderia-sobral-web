@@ -148,6 +148,14 @@ function OrderEdit() {
   }
 
   async function handleSaveClick() {
+    const saveButton = document.getElementsByClassName('save-button')[0];
+    if (saveButton) {
+      saveButton.setAttribute('disabled', '');
+      setTimeout(() => {
+        saveButton.removeAttribute('disabled');
+      }, 2000);
+    } 
+
     try {
       await api.put('orders', {
         id: order?.id,
