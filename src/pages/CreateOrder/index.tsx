@@ -356,6 +356,7 @@ export default function CreateOrder() {
               placeholder={'Selecione...'}
               value={customerId? customerOptions.find(customer => customer.value === customerId) : {value: '0', label: 'Selecione...'}}
               isSearchable
+              noOptionsMessage={() => 'Carregando...'}
               onChange={key => {
                 if (key) setCustomerId(key.value);
               }}
@@ -413,6 +414,7 @@ export default function CreateOrder() {
                 placeholder={'Selecione...'}
                 value={itemId? itemOptions.find(item => item.value === itemId) : {value: '0', label: 'Selecione...'}}
                 isSearchable
+                noOptionsMessage={() => 'Carregando...'}
                 onChange={key => {
                   if (key) {
                     setItemId(key.value);

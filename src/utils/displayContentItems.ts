@@ -17,6 +17,10 @@ export default function displayContentItems(content: Item[]) {
     <p class="item-actions-head">Ações</p>
   </div>`;
 
+  if (content.length === 0) {
+    return displayItems.innerHTML += `<br></br><p>Carregando...</p>`;
+  }
+
   content.forEach(item => {
     displayItems.innerHTML = displayItems.innerHTML + 
     `<div class="body-table-items" id=${item.id}>

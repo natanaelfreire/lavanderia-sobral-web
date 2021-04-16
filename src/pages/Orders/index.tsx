@@ -166,6 +166,7 @@ export default function Orders() {
               placeholder={'Selecione...'}
               isSearchable
               isClearable
+              noOptionsMessage={() => 'Carregando...'}
               onChange={key => {
                 if (key) setCustomerId(key.value); else setCustomerId('');
               }}
