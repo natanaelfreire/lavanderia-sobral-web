@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiUsers, FiEdit, FiRepeat } from 'react-icons/fi'
 import { IoShirtOutline } from 'react-icons/io5';
@@ -11,6 +11,12 @@ import './styles.css';
 
 export default function Sidebar() {
   const history = useHistory();
+  const [ user, setUser ] = useState('Carregando...');
+
+  useEffect(() => {
+    const storageUser = localStorage.getItem('@lavanderia:user');
+    if (storageUser) setUser(JSON.parse(storageUser).name);
+  }, []);
 
   function handleLogout() {
     localStorage.removeItem('@lavanderia:user');
@@ -32,7 +38,7 @@ export default function Sidebar() {
       <Link to="/orders" className="options"><FiEdit size="18px"/> &nbsp; Pedidos</Link>
       <Link to="/processing" className="options"><FiRepeat size="18px"/> &nbsp; Processamento</Link>
       <Link to="/payment" className="options"><GiMoneyStack size="18px"/> &nbsp; Não Pagos</Link>
-      <p className="username">admin@lavanderia</p>
+      <p className="username">{user}</p>
       <p className="logout" onClick={handleLogout}>Sair</p>
     </div>
   );
