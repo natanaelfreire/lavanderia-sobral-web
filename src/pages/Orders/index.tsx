@@ -264,7 +264,7 @@ export default function Orders() {
                     <p><span>Criado em: </span>{order.created_at}</p>
                     <p>-----------------------------------</p>
                       {filteredOrders.itemAddedByOrderId[order.id].map(item => (
-                        <p key={item.item_id}>{item.unit_quantity}x {item.description} - disc.{item.unit_discount} - R${Number(item.unit_subtotal).toFixed(2).split('.').join(',')}</p>
+                        <p key={item.item_id}>{Number(item.unit_quantity).toFixed(0)}x {item.description} - disc.{String(item.unit_discount).split('.').join(',')} - R${Number(item.unit_subtotal).toFixed(2).split('.').join(',')}</p>
                       ))}
                     <p>-----------------------------------</p>
                     <p><span>Subtotal: </span>R${Number(order.subtotal).toFixed(2).split('.').join(',')}</p>
