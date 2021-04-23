@@ -295,7 +295,7 @@ export default function Orders() {
                     <button onClick={async () => {
                       if (window.confirm('Deseja excluir pedido?')) await api.delete(`/orders/${order.id}`).then(response => {
                         if (response.status === 204) {
-                          handleOrdersFilterClick();
+                          window.location.reload();
                         }
                       });
                     }}>Cancelar / Excluir</button>
