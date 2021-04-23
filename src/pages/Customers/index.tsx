@@ -24,9 +24,14 @@ export default function Customers() {
   const [ count, setCount ] = useState(0);
 
   useEffect(() => {
+    const displayCustomers = document.getElementsByClassName('display-customers')[0];
+    displayCustomers.innerHTML = '<br></br>Carregando...';
+
     api.get('customers').then(response => {
       if (response.status === 200) {
         setCustomers(response.data);
+
+        displayCustomers.innerHTML = '';
       }
     })
   }, [count]);
