@@ -28,6 +28,7 @@ export default function Payment() {
   const [ dateToday, setDateToday ] = useState('');
 
   const search = useLocation().search;
+  const searchCustomerId = new URLSearchParams(search).get('customerId');
   
   useEffect(() => {
     const date = new Date();
@@ -47,27 +48,29 @@ export default function Payment() {
       if (response.status === 200) {
         const data: Order[] = response.data;
         setNotPaidOrders(data);
-        const filtered = data.filter(order => (order.created_at.split('/').reverse().join('-')) === currentDate);
-        setFilteredOrders(filtered);
+
+        if (searchCustomerId) {
+          api.get(`customers/${searchCustomerId}`).then(response => {
+            if (response.status === 200) {
+              setInputName(response.data.name);
+      
+              const notPaidFilter = document.getElementsByClassName('not-paid-filter')[0];
+
+              if (notPaidFilter)
+                notPaidFilter.innerHTML = `<a href="/download?customerId=${searchCustomerId}" target="_blank"><button class="print-all-pendences">Imprimir todas as pendências</button></a>`;
+
+              const filtered = data.filter(order => order.name.toUpperCase().includes(response.data.name.toUpperCase()));
+              setFilteredOrders(filtered);
+            }
+          })
+        } else {
+          const filtered = data.filter(order => (order.created_at.split('/').reverse().join('-')) === currentDate);
+          setFilteredOrders(filtered);
+        }
       }
     })
     
-  }, []);
-
-  useEffect(() => {
-    const searchCustomerId = new URLSearchParams(search).get('customerId');
-
-    if (searchCustomerId) api.get(`customers/${searchCustomerId}`).then(response => {
-      if (response.status === 200) {
-        setInputName(response.data.name);
-
-        const notPaidFilter = document.getElementsByClassName('not-paid-filter')[0];
-
-        if (notPaidFilter)
-          notPaidFilter.innerHTML += `<a href="/download?customerId=${searchCustomerId}" target="_blank"><button class="print-all-pendences">Imprimir todas as pendências</button></a>`;
-      }
-    })
-  }, [search]);
+  }, [searchCustomerId]);
 
   useEffect(() => {
     const displayNotPaid = document.getElementsByClassName('display-not-paid')[0];
@@ -121,7 +124,7 @@ export default function Payment() {
       <Sidebar/>
 
       <main className="main-content">
-        <h1>Histórico de não pago&nbsp;<RiMoneyDollarCircleLine/></h1>
+        <h1>Histórico de não pago&nbsp;<RiMoneyDollarCircleLine/>&nbsp;{searchCustomerId? inputName : ''}</h1>
 
         <div className="body-main-content">
           <div className="display-not-paid">

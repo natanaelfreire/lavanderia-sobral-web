@@ -70,6 +70,12 @@
   padding: 8px;
   margin-top: 10px;
   margin-left: 12px;
+  transition: background-color 0.2s;
+}
+
+.print-all-pendences:hover {
+  background: #005ab9;
+  color: #ffff;
 }
 
 .not-paid-block div button:hover {
