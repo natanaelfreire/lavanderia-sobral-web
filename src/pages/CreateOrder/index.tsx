@@ -334,7 +334,7 @@ export default function CreateOrder() {
           setTimeout(() => {
             submitMessage.id = '';
             window.open(`/download?orderId=${orderIdCreated}`, '_blank');
-          }, 800);
+          }, 500);
         }
       }
     });
