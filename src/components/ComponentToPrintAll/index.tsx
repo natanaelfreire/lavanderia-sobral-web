@@ -28,8 +28,8 @@ export class ComponentToPrintAll extends React.PureComponent<Props, {}> {
               <img src={Logo} alt="logo" width="120px"/>
               <p><span>Benedita Eliene Divino Freire</span><br></br>
               Avenida John Sanford, 352 - Em frente a Santa Cruz Distribuidora<br></br>
-              (88) 9911-8065,
-              (88) 99740-5747</p>  
+              (88) 3614-5957,
+              (88) 9 9333-1150</p>  
             </div>
 
             <p>Pedidos de Nº {this.props.orders.map((order, index) => {
@@ -98,7 +98,7 @@ export class ComponentToPrintAll extends React.PureComponent<Props, {}> {
 
           <footer>
             <p className="rules-contract">
-              As partes decidem entre si que o CONTRATANTE tem o prazo máximo de 90 (noventa) dias para retirada das roupas entregues para lavagem, ao CONTRATADO. Caso isto não ocorra do prazo acima determinado, o CONTRATANTE estará ciente e de acordo com o que segue: 1º A manutenção do produto junto ao estabelecimento não configura nenhuma forma de depósito. 2º O consumidor autoriza prévia e expressamente a venda do produto para o pagamento dos serviços efetuados, tendo direito ao recebimento de eventual saldo positivo ou tendo o dever de efetuar o pagamento da diferença restante, conforme o valor apurado com a venda do produto e o seu débito. Bem como concorda que caso haja dano a peça de roupa causado pelo CONTRATADO, será pago 50% do valor de mercado da peça nova atualizado conforme comprovação de preço no mercado local. O Código de Defesa do Consumidor em seu Art. 26, inciso I. rege que: “Art. 26 – O direito de reclamar pelos vícios aparentes ou de fácil constatação caduca em: I – 30 (trinta) dias, tratando-se de fornecimento de serviço e de produtos não duráveis.” 
+            As partes decidem entre si que o CONTRATANTE tem o prazo máximo de 90 (noventa) dias para retirada das roupas entregues para lavagem, ao CONTRATADO. Caso isto não ocorra, o CONTRATANTE estará ciente e de acordo com o que segue: 1º A manutenção do produto junto ao estabelecimento não configura nenhuma forma de depósito. 2º O consumidor autoriza prévia e expressamente a venda do produto para o pagamento dos serviços efetuados, tendo direito ao recebimento de eventual saldo positivo ou tendo o dever de efetuar o pagamento da diferença restante, conforme o valor apurado com a venda do produto e o seu débito. Bem como concorda que caso haja dano a peça de roupa causado pelo CONTRATADO, será pago 50% do valor de mercado da peça nova atualizado conforme comprovação de preço no mercado local. Consultar o Código de Defesa do Consumidor em seu Art. 26, inciso I.
             </p>
             <div className="sign-contract">
               <div>
@@ -119,8 +119,8 @@ export class ComponentToPrintAll extends React.PureComponent<Props, {}> {
             <img src={Logo} alt="logo" width="120px"/>
               <p><span>Benedita Eliene Divino Freire</span><br></br>
               Avenida John Sanford, 352 - Em frente a Santa Cruz Distribuidora<br></br>
-              (88) 9911-8065,
-              (88) 99740-5747</p>  
+              (88) 3614-5957,
+              (88) 9 9333-1150</p>  
             </div>
 
             <p>Pedidos de Nº {this.props.orders.map((order, index) => {
@@ -189,7 +189,7 @@ export class ComponentToPrintAll extends React.PureComponent<Props, {}> {
 
           <footer>
             <p className="rules-contract">
-              As partes decidem entre si que o CONTRATANTE tem o prazo máximo de 90 (noventa) dias para retirada das roupas entregues para lavagem, ao CONTRATADO. Caso isto não ocorra do prazo acima determinado, o CONTRATANTE estará ciente e de acordo com o que segue: 1º A manutenção do produto junto ao estabelecimento não configura nenhuma forma de depósito. 2º O consumidor autoriza prévia e expressamente a venda do produto para o pagamento dos serviços efetuados, tendo direito ao recebimento de eventual saldo positivo ou tendo o dever de efetuar o pagamento da diferença restante, conforme o valor apurado com a venda do produto e o seu débito. Bem como concorda que caso haja dano a peça de roupa causado pelo CONTRATADO, será pago 50% do valor de mercado da peça nova atualizado conforme comprovação de preço no mercado local. O Código de Defesa do Consumidor em seu Art. 26, inciso I. rege que: “Art. 26 – O direito de reclamar pelos vícios aparentes ou de fácil constatação caduca em: I – 30 (trinta) dias, tratando-se de fornecimento de serviço e de produtos não duráveis.” 
+            As partes decidem entre si que o CONTRATANTE tem o prazo máximo de 90 (noventa) dias para retirada das roupas entregues para lavagem, ao CONTRATADO. Caso isto não ocorra, o CONTRATANTE estará ciente e de acordo com o que segue: 1º A manutenção do produto junto ao estabelecimento não configura nenhuma forma de depósito. 2º O consumidor autoriza prévia e expressamente a venda do produto para o pagamento dos serviços efetuados, tendo direito ao recebimento de eventual saldo positivo ou tendo o dever de efetuar o pagamento da diferença restante, conforme o valor apurado com a venda do produto e o seu débito. Bem como concorda que caso haja dano a peça de roupa causado pelo CONTRATADO, será pago 50% do valor de mercado da peça nova atualizado conforme comprovação de preço no mercado local. Consultar o Código de Defesa do Consumidor em seu Art. 26, inciso I.
             </p>
             <div className="sign-contract">
               <div>
