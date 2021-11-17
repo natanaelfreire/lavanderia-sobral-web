@@ -249,14 +249,17 @@ export default function CreateOrder() {
     setSaveButtonIsDisabled(true);
 
     if (!customerId) {
+      setSaveButtonIsDisabled(false);
       return alert('Selecione o Cliente antes de salvar.');
     }
 
     if (!deliveryDate) {
+      setSaveButtonIsDisabled(false);
       return alert('Selecione a Data de Retirada antes de salvar.');
     }
 
     if (!itemAdded[0]) {
+      setSaveButtonIsDisabled(false);
       return alert('Adicione alguma peça no pedido antes de salvar.');
     }
 
