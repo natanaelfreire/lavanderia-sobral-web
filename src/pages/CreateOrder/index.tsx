@@ -62,6 +62,7 @@ export default function CreateOrder() {
     {value: '2', label: 'Agora'},
   ]);
   const [ itemAdded, setItemAdded ] = useState<ItemAdded[]>([]);
+  const [ saveButtonIsDisabled, setSaveButtonIsDisabled ] = useState(false);
 
   useEffect(() => {
     api.get('customers').then(response => {
@@ -245,13 +246,7 @@ export default function CreateOrder() {
   }
 
   function handleSaveClick() {
-    const saveButton = document.getElementsByClassName('save-button')[0];
-    if (saveButton) {
-      saveButton.setAttribute('disabled', '');
-      setTimeout(() => {
-        saveButton.removeAttribute('disabled');
-      }, 2000);
-    } 
+    setSaveButtonIsDisabled(true);
 
     if (!customerId) {
       return alert('Selecione o Cliente antes de salvar.');
@@ -281,7 +276,7 @@ export default function CreateOrder() {
       currentDate += "/" + (month + 1);
 
     currentDate += "/" + year;
-    
+
     api.post('orders', {
       order_status: 'Pendente',
       payment_status: paymentStatus,
@@ -337,6 +332,13 @@ export default function CreateOrder() {
           }, 500);
         }
       }
+
+      setSaveButtonIsDisabled(false);
+      
+    }).catch(() => {
+      alert('Erro ao salvar pedido.');
+
+      setSaveButtonIsDisabled(false);
     });
   }
 
@@ -589,6 +591,7 @@ export default function CreateOrder() {
             type="button" 
             className="save-button" 
             onClick={handleSaveClick}
+            disabled={saveButtonIsDisabled}
           >Salvar</button>
         </div>
 
