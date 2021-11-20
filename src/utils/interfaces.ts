@@ -22,9 +22,9 @@ export type Item = {
   item_id: string;
   observation: string;
   order_id: number;
-  unit_cost: number;
-  unit_discount: number;
-  unit_quantity: number;
-  unit_subtotal: number;
+  unit_cost: string;
+  unit_discount: string;
+  unit_quantity: string;
+  unit_subtotal: string;
 }
 

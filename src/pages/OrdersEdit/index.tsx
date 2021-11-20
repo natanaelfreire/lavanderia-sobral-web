@@ -127,10 +127,10 @@ function OrderEdit() {
         item_id: itemId,
         description: itemOptions.find(item => item.value === itemId)?.label || '',
         observation: observation,
-        unit_quantity: unitQuantity,
-        unit_cost: unitCost,
-        unit_discount: unitDiscount,
-        unit_subtotal: unitSubtotal,
+        unit_quantity: unitQuantity.toString(),
+        unit_cost: unitCost.toString(),
+        unit_discount: unitDiscount.toString(),
+        unit_subtotal: unitSubtotal.toString(),
         order_id: parseInt(id)
       });
       
@@ -329,16 +329,16 @@ function OrderEdit() {
                     {item.observation}
                   </td>
                   <td>
-                    {item.unit_quantity.toFixed(0)}
+                    {parseInt(item.unit_quantity).toFixed(0)}
                   </td>
                   <td>
-                    {item.unit_cost.toFixed(2).split('.').join(',')}
+                    {parseFloat(item.unit_cost).toFixed(2).split('.').join(',')}
                   </td>
                   <td>
-                    {item.unit_discount.toFixed(2).split('.').join(',')}
+                    {parseFloat(item.unit_discount).toFixed(2).split('.').join(',')}
                   </td>
                   <td>
-                    {item.unit_subtotal.toFixed(2).split('.').join(',')}
+                    {parseFloat(item.unit_subtotal).toFixed(2).split('.').join(',')}
                   </td>
                   <td>
                     <button type="button" className="delete-button" onClick={() => {
@@ -355,8 +355,8 @@ function OrderEdit() {
                       let totalSubtotal = 0;
 
                       newItems.forEach(element => {
-                        totalQuantity += element.unit_quantity;
-                        totalSubtotal += element.unit_subtotal;
+                        totalQuantity += parseFloat(element.unit_quantity);
+                        totalSubtotal += parseFloat(element.unit_subtotal);
                       });
 
                       setItemQuantity(totalQuantity);
