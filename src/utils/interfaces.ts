@@ -1,6 +1,4 @@
-import React from 'react';
-
-export interface Order {
+export type Order = {
   id: string;
   order_status: string;
   payment_status: string;
@@ -19,11 +17,11 @@ export interface Order {
   customer_id: string;
 }
 
-export interface Item {
+export type Item = {
   description: string;
   item_id: string;
   observation: string;
-  order_id: string;
+  order_id: number;
   unit_cost: number;
   unit_discount: number;
   unit_quantity: number;

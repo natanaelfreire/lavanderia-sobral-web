@@ -86,6 +86,7 @@ function OrderEdit() {
       }
     }).then(response => {
       if (response.status === 200) {
+        console.log('retorno api:', response.data)
         setOrder(response.data.orders[0]);
         setItems(response.data.itemAddedByOrderId[id]);
         setCustomer(response.data.customerByOrderId[id]);
@@ -130,7 +131,7 @@ function OrderEdit() {
         unit_cost: unitCost,
         unit_discount: unitDiscount,
         unit_subtotal: unitSubtotal,
-        order_id: id
+        order_id: parseInt(id)
       });
       
       setItems(newArrayOfItemAdded);
@@ -328,16 +329,16 @@ function OrderEdit() {
                     {item.observation}
                   </td>
                   <td>
-                    {Number(item.unit_quantity).toFixed(0)}
+                    {item.unit_quantity.toFixed(0)}
                   </td>
                   <td>
-                    {Number(item.unit_cost).toFixed(2).split('.').join(',')}
+                    {item.unit_cost.toFixed(2).split('.').join(',')}
                   </td>
                   <td>
-                    {Number(item.unit_discount).toFixed(2).split('.').join(',')}
+                    {item.unit_discount.toFixed(2).split('.').join(',')}
                   </td>
                   <td>
-                    {Number(item.unit_subtotal).toFixed(2).split('.').join(',')}
+                    {item.unit_subtotal.toFixed(2).split('.').join(',')}
                   </td>
                   <td>
                     <button type="button" className="delete-button" onClick={() => {
@@ -348,6 +349,7 @@ function OrderEdit() {
                       });
 
                       setItems(newItems); 
+                      console.log(newItems)
 
                       let totalQuantity = 0;
                       let totalSubtotal = 0;
@@ -377,7 +379,7 @@ function OrderEdit() {
             label="Qntde. peças: " 
             name="item-quantity" 
             inputType="number" 
-            value={Number(itemQuantity).toFixed(0)}
+            value={itemQuantity.toFixed(0)}
             readOnly
           />
           <Input 
@@ -385,7 +387,7 @@ function OrderEdit() {
             label="Subtotal: " 
             name="subtotal" 
             inputType="number"
-            value={Number(subtotal).toFixed(2)} 
+            value={subtotal.toFixed(2)} 
             readOnly
           />
           <Input 
@@ -419,7 +421,7 @@ function OrderEdit() {
             label="Total: " 
             name="total" 
             inputType="number" 
-            value={Number(total).toFixed(2)}
+            value={total.toFixed(2)}
             readOnly
           />
         </div>
