@@ -91,11 +91,11 @@ function OrderEdit() {
         setItems(response.data.itemAddedByOrderId[id]);
         setCustomer(response.data.customerByOrderId[id]);
 
-        setItemQuantity(response.data.orders[0].item_quantity);
-        setSubtotal(response.data.orders[0].subtotal);
-        setDiscount(response.data.orders[0].discount);
-        setPaymentMade(response.data.orders[0].payment_made);
-        setTotal(response.data.orders[0].cost);
+        setItemQuantity(parseFloat(response.data.orders[0].item_quantity));
+        setSubtotal(parseFloat(response.data.orders[0].subtotal));
+        setDiscount(parseFloat(response.data.orders[0].discount));
+        setPaymentMade(parseFloat(response.data.orders[0].payment_made));
+        setTotal(parseFloat(response.data.orders[0].cost));
       }
     });
   }, [id]);

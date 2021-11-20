@@ -6,10 +6,10 @@ export type Order = {
   payment_moment: string;
   delivery_date: string;
   item_quantity: number;
-  subtotal: number;
-  discount: number
-  payment_made: number;
-  cost: number;
+  subtotal: string;
+  discount: string;
+  payment_made: string;
+  cost: string;
   created_at: string;
   date_number: number;
   date_out_number: number;
