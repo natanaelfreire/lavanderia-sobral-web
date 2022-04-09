@@ -1,11 +1,8 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
+import { toast } from 'react-toastify';
 
-import Sidebar from '../../components/Sidebar';
-import Input from '../../components/Input';
 import api from '../../services/api';
-
-import './styles.css';
 
 interface Params {
   id: string;
@@ -20,8 +17,10 @@ interface Item {
 export default function ItemsEdit() {
   const { id } = useParams<Params>();
 
-  const [ description, setDescription ] = useState('');
-  const [ cost, setCost ] = useState('');
+  const [description, setDescription] = useState('');
+  const [cost, setCost] = useState('');
+
+  const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState(false);
 
   const history = useHistory();
 
@@ -38,80 +37,102 @@ export default function ItemsEdit() {
 
   function handleItemsChangesSubmit(event: FormEvent) {
     event.preventDefault();
-    const saveButton = document.getElementsByClassName('save-button')[0];
-    if (saveButton) {
-      saveButton.setAttribute('disabled', '');
-      setTimeout(() => {
-        saveButton.removeAttribute('disabled');
-      }, 2000);
-    } 
-    
-    const submitMessage = document.getElementsByClassName('submit-message')[0];
+    setSaveButtonIsDisabled(true);
 
-    if (!description || !cost) {
-      if (submitMessage) {
-        submitMessage.textContent = 'Falta preencher campos vazios.';
-        submitMessage.id = 'error-message-visibility';
+    if (!description) {
+      toast.error('Preencha o campo Descrição.');
+      setSaveButtonIsDisabled(false);
+      return;
+    }
 
-        setTimeout(() => {
-          submitMessage.id = '';
-        }, 2000);
-      }
-
+    if (!cost) {
+      toast.error('Preencha o campo Preço.');
+      setSaveButtonIsDisabled(false);
       return;
     }
 
     const formatedCost = Number(cost.split(',').join('.'));
 
-    api.put('items', {
+    toast.promise(api.put('items', {
       id,
       description,
       cost: formatedCost
-    }).then(response => {
-      if (response.status === 200)
-        history.push('/items');
-    });
+    }), {
+      pending: 'Salvando mudanças nos dados...',
+      success: {
+        render() {
+          setSaveButtonIsDisabled(false);
+          history.push('/items');
+
+          return 'Mudanças salvas com sucesso!';
+        }
+      },
+      error: {
+        render() {
+          setSaveButtonIsDisabled(false);
+
+          return 'Erro ao salvar mudanças.';
+        }
+      }
+    })
+
   }
 
   return (
-    <div className="page-items-edit">
-      <Sidebar />
+    <div className="container">
+      <h5 className="bg-primary p-1 rounded text-white bg-opacity-75">Editando valores/nome da peça... </h5>
 
-      <main className="main-content">
-        <h1>Editando valores/nome da peça... </h1>
-
-        <div className="block">
-          <form>
-            <Input 
-              className="item-form-description" 
-              label="Descrição: " 
-              name="description" 
-              inputType="text"
-              value={description}
-              onChange={e => setDescription(e.target.value)} 
-              required 
-            />
-            <Input 
-              className="item-form-cost" 
-              label="Preço: " 
-              name="cost" 
-              inputType="number" 
-              value={cost}
-              onChange={e => setCost(e.target.value)}
-              required 
-            /> 
-
-            <div className="bottom-form">
-              <button
-                type="submit" 
-                className="save-button"
-                onClick={handleItemsChangesSubmit}
-              >Salvar mudanças</button>
-              <div className="submit-message"></div>
-            </div>
-          </form>
+      <div className="row">
+        <div className="col-12 col-md-6 mb-2">
+          <label className="mb-1" htmlFor="description">Descrição</label><br />
+          <input
+            id="description"
+            type="text"
+            maxLength={35}
+            className="py-1 px-2"
+            style={{
+              width: '100%',
+              borderColor: '#ccc',
+              borderRadius: '4px',
+              borderStyle: 'solid',
+              borderWidth: '1px',
+            }}
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            required
+          />
         </div>
-      </main>
+
+        <div className="col-12 col-md-6 mb-3">
+          <label className="mb-1" htmlFor="cost">Preço R$</label><br />
+          <input
+            id="cost"
+            type="number"
+            className="py-1 px-2"
+            style={{
+              width: '100%',
+              borderColor: '#ccc',
+              borderRadius: '4px',
+              borderStyle: 'solid',
+              borderWidth: '1px',
+            }}
+            value={cost}
+            onChange={e => setCost(e.target.value)}
+            min={0}
+            required
+          />
+        </div>
+
+        <div className="col-12">
+          <button
+            type="submit"
+            className="btn btn-success"
+            disabled={saveButtonIsDisabled}
+            onClick={handleItemsChangesSubmit}
+          >Salvar mudanças</button>
+        </div>
+      </div>
+
     </div>
   );
 }

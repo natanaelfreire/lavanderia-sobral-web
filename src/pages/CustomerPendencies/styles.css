@@ -1,0 +1,100 @@
+/* Activity */
+.pendencies .activity {
+  font-size: 14px;
+}
+.pendencies .activity .activity-item .activite-label {
+  color: #888;
+  position: relative;
+  flex-shrink: 0;
+  flex-grow: 0;
+  min-width: 64px;
+}
+.pendencies .activity .activity-item .activite-label::before {
+  content: "";
+  position: absolute;
+  right: -11px;
+  width: 4px;
+  top: 0;
+  bottom: 0;
+  background-color: #eceefe;
+}
+.pendencies .activity .activity-item .activity-badge {
+  margin-top: 3px;
+  z-index: 1;
+  font-size: 11px;
+  line-height: 0;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 3px solid #fff;
+  flex-grow: 0;
+}
+.pendencies .activity .activity-item .activity-content, .pendencies .activity .activity-item .activity-content {
+  padding-bottom: 30px;
+}
+.pendencies .activity .activity-item:first-child .activite-label::before {
+  top: 5px;
+}
+.pendencies .activity .activity-item:last-child .activity-content {
+  padding-bottom: 0;
+}
+
+/* News & Updates */
+.pendencies .news .post-item + .post-item {
+  margin-top: 15px;
+}
+.pendencies .news img {
+  width: 80px;
+  float: left;
+  border-radius: 5px;
+}
+.pendencies .news h4 {
+  font-size: 15px;
+  margin-left: 95px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.pendencies .news h4 a {
+  color: #012970;
+  transition: 0.3s;
+}
+.pendencies .news h4 a:hover {
+  color: #4154f1;
+}
+.pendencies .news p {
+  font-size: 14px;
+  color: #777777;
+  margin-left: 95px;
+}
+
+.card-icon {
+  font-size: 32px;
+  line-height: 0;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.card-icon.qntd-pendentes {
+  color: #dc3545;
+  background: #fceef0;
+}
+.card-icon.valor-acumulado {
+  color: #2eca6a;
+  background: #e0f8e9;
+}
+.card-subtitle-pendencies {
+  font-size: 18px;
+  font-weight: bold;
+  color: #012970;
+  font-family: "Poppins", sans-serif;
+}
+
+@media (max-width: 1199px) {
+  .activite-label {
+    font-size: 12px;
+  }
+}
+
+.tabelaReceber th, .tabelaReceber td {
+  padding: 4px;
+}

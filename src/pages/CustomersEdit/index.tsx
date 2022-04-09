@@ -1,11 +1,8 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router';
+import { toast } from 'react-toastify';
 
-import Sidebar from '../../components/Sidebar';
-import Input from '../../components/Input';
 import api from '../../services/api';
-
-import './styles.css';
 
 interface Params {
   id: string;
@@ -20,9 +17,11 @@ interface Customer {
 
 function CustomerEdit() {
   const { id } = useParams<Params>();
-  const [ name, setName ] = useState('');
-  const [ address, setAddress ] = useState('');
-  const [ phone, setPhone ] = useState('');
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const [saveButtonIsDisabled, setSaveButtonIsDisabled] = useState(false);
 
   const history = useHistory();
 
@@ -40,87 +39,124 @@ function CustomerEdit() {
 
   function handleCustomerChangesSubmit(event: FormEvent) {
     event.preventDefault();
-    const saveButton = document.getElementsByClassName('save-button')[0];
-    if (saveButton) {
-      saveButton.setAttribute('disabled', '');
-      setTimeout(() => {
-        saveButton.removeAttribute('disabled');
-      }, 2000);
-    } 
-    
-    const submitMessage = document.getElementsByClassName('submit-message')[0];
+    setSaveButtonIsDisabled(true);
 
-    if (!name || !phone || !address) {
-      if (submitMessage) {
-        submitMessage.textContent = 'Falta preencher campos vazios.';
-        submitMessage.id = 'error-message-visibility';
-
-        setTimeout(() => {
-          submitMessage.id = '';
-        }, 2000);
-      }
-
+    if (!name) {
+      toast.error('Preencha o campo Nome.');
+      setSaveButtonIsDisabled(false);
       return;
     }
 
-    api.put('customers', {
+    if (!address) {
+      toast.error('Preencha o campo Endereço.');
+      setSaveButtonIsDisabled(false);
+      return;
+    }
+
+    if (!phone) {
+      toast.error('Preencha o campo Telefone.');
+      setSaveButtonIsDisabled(false);
+      return;
+    }
+
+    toast.promise(api.put('customers', {
       id,
       name,
       phone,
       address,
-    }).then(response => {
-      if (response.status === 200)
-        history.push('/customers');
-    });
+    }), {
+      pending: 'Salvando as mudanças...',
+      success: {
+        render() {
+          setSaveButtonIsDisabled(false);
+          history.push('/customers');
+
+          return 'Mudanças foram salvas com sucesso!';
+        }
+      },
+      error: {
+        render() {
+          setSaveButtonIsDisabled(false);
+          
+          return 'Erro ao salvar os dados.';
+        }
+      }
+    }) 
+  
   }
 
   return (
-    <div className="page-customers-edit">
-      <Sidebar />
+    <div className="container">
+      <h5 className="bg-primary p-1 rounded text-white bg-opacity-75">Editando dados do cliente...</h5>
 
-      <main className="main-content">
-        <h1>Editando dados do cliente...</h1>
-
-        <div className="block">
-          <form>
-            <Input 
-              className="customer-form-name" 
-              label="Nome: " 
-              name="name" 
-              inputType="text" 
-              value={name}
-              onChange={e => setName(e.target.value)}
-              required 
-            />
-            <Input 
-              className="customer-form-address" 
-              label="Endereço: " 
-              name="address" 
-              inputType="text" 
-              value={address}
-              onChange={e => setAddress(e.target.value)}
-              required 
-            />
-            <Input 
-              className="customer-form-phone" 
-              label="Telefone: " 
-              name="phone" 
-              inputType="tel" 
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              required 
-            />
-            <div className="bottom-form">
-              <button
-                type="submit" 
-                className="save-button"
-                onClick={handleCustomerChangesSubmit}
-              >Salvar mudanças</button>
-              <div className="submit-message"></div>
-            </div>
-          </form>
+      <div className="row">
+        <div className="col-12 col-md-6 mb-2">
+          <label className="mb-1" htmlFor="name">Nome</label><br />
+          <input
+            id="name"
+            type="text"
+            className="py-1 px-2"
+            style={{
+              width: '100%',
+              borderColor: '#ccc',
+              borderRadius: '4px',
+              borderStyle: 'solid',
+              borderWidth: '1px',
+            }}
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+          />
         </div>
-      </main>
+
+        <div className="col-12 col-md-6 mb-2">
+          <label className="mb-1" htmlFor="address">Endereço</label><br />
+          <input
+            id="address"
+            type="text"
+            className="py-1 px-2"
+            style={{
+              width: '100%',
+              borderColor: '#ccc',
+              borderRadius: '4px',
+              borderStyle: 'solid',
+              borderWidth: '1px',
+            }}
+            value={address}
+            onChange={e => setAddress(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="col-12 col-md-6 mb-3">
+          <label className="mb-1" htmlFor="phone">Telefone</label><br />
+          <input
+            id="phone"
+            type="tel"
+            className="py-1 px-2"
+            style={{
+              width: '100%',
+              borderColor: '#ccc',
+              borderRadius: '4px',
+              borderStyle: 'solid',
+              borderWidth: '1px',
+            }}
+            value={phone}
+            onChange={e => setPhone(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="col-12">
+          <button
+            type="submit"
+            className="btn btn-success"
+            disabled={saveButtonIsDisabled}
+            onClick={handleCustomerChangesSubmit}
+          >Salvar</button>
+        </div>
+      </div>
+      
     </div>
   );
 }

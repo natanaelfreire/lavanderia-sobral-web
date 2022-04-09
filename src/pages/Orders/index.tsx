@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { FiX } from 'react-icons/fi';
 
-import Sidebar from '../../components/Sidebar';
 import Select from 'react-select';
 import Input from '../../components/Input';
 
@@ -153,7 +152,6 @@ export default function Orders() {
 
   return (
     <div className="page-orders">
-      <Sidebar />
 
       <main className="main-content">
         <h1>Preencha algum campo para fazer a filtragem...</h1>
