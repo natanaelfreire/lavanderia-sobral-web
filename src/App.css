@@ -80,7 +80,11 @@ body {
   border: none;
   border-radius: 5px;
   box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
-  overflow: hidden;
+}
+
+.card .py-1 {
+  padding-top: 0.4rem !important;
+  padding-bottom: 0.4rem !important;
 }
 
 .card-header, .card-footer {

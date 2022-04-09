@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Select from "react-select";
-import { FiEdit3 } from 'react-icons/fi';
 import { FaPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
@@ -55,6 +54,7 @@ export default function CreateOrder() {
   const [paymentTypeOptions] = useState([
     { value: '1', label: 'Dinheiro' },
     { value: '2', label: 'Cartão' },
+    { value: '3', label: 'Pix' },
   ]);
   const [paymentMomentOptions] = useState([
     { value: '1', label: 'Retirada' },
@@ -355,445 +355,406 @@ export default function CreateOrder() {
   return (
     <div className="">
 
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">Criar Pedido&nbsp;<FiEdit3 className="fs-6 mb-1" /></h5>
 
-          <div className="row">
-            <div className="col-12 col-md-12 mb-2">
-              <label className="mb-1" htmlFor="name">Cliente </label>
-              <Select
-                required
-                id="name"
-                styles={{
-                  container: (provided) => ({
-                    ...provided,
-                    width: '100%'
-                  })
-                }}
-                placeholder={'Selecione...'}
-                value={customerId ? customerOptions.find(customer => customer.value === customerId) : { value: '0', label: 'Selecione...' }}
-                isSearchable
-                noOptionsMessage={() => 'Carregando...'}
-                onChange={key => {
-                  if (key) setCustomerId(key.value);
-                }}
-                options={customerOptions}
-              />
-            </div>
-          </div>
 
-          <div className="row">
-            <div className="col-12 col-md-4 col-lg-3 mb-2">
-              <label className="mb-1" htmlFor="paymentType">Tipo de pagamento</label>
-              <Select
-                required
-                id="paymentType"
-                styles={{
-                  container: (provided) => ({
-                    ...provided,
-                    width: '100%'
-                  })
-                }}
-                value={paymentType}
-                isSearchable
-                onChange={key => {
-                  if (key) setPaymentType({ value: key.value, label: key.label });
-                }}
-                options={paymentTypeOptions}
-              />
-            </div>
+      <div className="row flex-md-row-reverse">
+        <div className="col-12 col-md-6">
+          <div className="card">
+            <div className="card-body">
+              {/* <h5 className="card-title">Criar Pedido&nbsp;<FiEdit3 className="fs-6 mb-1" /></h5> */}
+              <h5 className="card-title">Dados do Cliente</h5>
 
-            <div className="col-12 col-md-4 col-lg-3 mb-2">
-              <label className="mb-1" htmlFor="paymentMoment">Pagamento</label>
-              <Select
-                required
-                id="paymentMoment"
-                styles={{
-                  container: (provided) => ({
-                    ...provided,
-                    width: '100%'
-                  })
-                }}
-                value={paymentMoment}
-                isSearchable
-                onChange={key => {
-                  if (key) setPaymentMoment({ value: key.value, label: key.label });
-                }}
-                options={paymentMomentOptions}
-              />
-            </div>
-
-            <div className="col-12 col-md-4 col-lg-3 mb-2">
-              <label className="mb-1" htmlFor="delivery">Retirada</label><br />
-              <input
-                id="delivery"
-                required
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                type="date"
-                value={deliveryDate}
-                onChange={e => setDeliveryDate(e.target.value)}
-              />
-              {/* <Input
-            required
-            label="Retirada: "
-            name="delivery"
-            inputType="date"
-            value={deliveryDate}
-            onChange={e => setDeliveryDate(e.target.value)}
-          /> */}
-            </div>
-          </div>
-
-          <h5 className="card-title mt-1 mb-0">Peças</h5>
-
-          <div className="row">
-            <div className="col-12 col-md-6 mb-2">
-              <label className="mb-1" htmlFor="item">Peça</label>
-              <Select
-                required
-                id="item"
-                maxMenuHeight={200}
-                styles={{
-                  container: (provided) => ({
-                    ...provided,
-                    width: '100%'
-                  })
-                }}
-                placeholder={'Selecione...'}
-                value={itemId ? itemOptions.find(item => item.value === itemId) : { value: '0', label: 'Selecione...' }}
-                isSearchable
-                noOptionsMessage={() => 'Carregando...'}
-                onChange={key => {
-                  if (key) {
-                    setItemId(key.value);
-                    const newUnitCost = Number(itemOptions.find(item => item.value === key.value)?.cost);
-                    setUnitCost(newUnitCost);
-                    setUnitQuantity(1);
-                    setUnitDiscount(0);
-                    setUnitSubtotal(newUnitCost);
-                  }
-                }}
-                options={itemOptions}
-              />
-            </div>
-
-            <div className="col-12 col-md-6 mb-2">
-              <label className="mb-1" htmlFor="observation">Observação</label><br />
-              <input
-                id="observation"
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                type="text"
-                value={observation}
-                onChange={e => setObservation(e.target.value)}
-              />
-              {/* <Input
-            label="OBS: "
-            name="observation"
-            inputType="text"
-            value={observation}
-            onChange={e => setObservation(e.target.value)}
-          /> */}
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-6 col-md-3">
-              <label className="mb-1" htmlFor="unit-value">Valor unitário</label><br />
-              <input
-                id="unit-value"
-                type="number"
-                readOnly
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={Number(unitCost).toFixed(2)}
-              />
-              {/* <Input
-            className="numeric-input"
-            label="Valor unitário: "
-            name="unit-value"
-            inputType="number"
-            readOnly
-            value={Number(unitCost).toFixed(2)}
-          /> */}
-            </div>
-
-            <div className="col-6 col-md-2">
-              <label className="mb-1" htmlFor="unit-quantity">Quantidade</label><br />
-              <input
-                id="unit-quantity"
-                type="number"
-                min={1}
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={unitQuantity}
-                onChange={e => {
-                  const newUnitQuantity = Number(e.target.value);
-                  setUnitQuantity(newUnitQuantity);
-                  setUnitSubtotal(unitCost * newUnitQuantity);
-                }}
-              />
-              {/* <Input
-            className="numeric-input"
-            label="Quantidade: "
-            name="unit-quantity"
-            inputType="number"
-            min={1}
-            value={unitQuantity}
-            onChange={e => {
-              const newUnitQuantity = Number(e.target.value);
-              setUnitQuantity(newUnitQuantity);
-              setUnitSubtotal(unitCost * newUnitQuantity);
-            }}
-          /> */}
-            </div>
-
-            <div className="col-6 col-md-3">
-              <label className="mb-1" htmlFor="unit-discount">Desconto</label><br />
-              <input
-                id="unit-discount"
-                type="number"
-                min={0}
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={unitDiscount}
-                onChange={e => {
-                  const newUnitDiscount = Number(e.target.value.split(',').join('.'));
-                  setUnitDiscount(newUnitDiscount);
-                  setUnitSubtotal(unitSubtotal + unitDiscount - newUnitDiscount);
-                }}
-              />
-              {/* <Input
-            className="numeric-input"
-            label="Desconto: "
-            name="unit-discount"
-            inputType="number"
-            min={0}
-            value={unitDiscount}
-            onChange={e => {
-              const newUnitDiscount = Number(e.target.value.split(',').join('.'));
-              setUnitDiscount(newUnitDiscount);
-              setUnitSubtotal(unitSubtotal + unitDiscount - newUnitDiscount);
-            }}
-          /> */}
-            </div>
-
-            <div className="col-6 col-md-3">
-              <label className="mb-1" htmlFor="unit-sutotal">Subtotal</label><br />
-              <input
-                id="unit-sutotal"
-                type="number"
-                readOnly
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={Number(unitSubtotal).toFixed(2)}
-              />
-              {/* <Input
-            className="numeric-input"
-            label="Subtotal: "
-            name="unit-sutotal"
-            inputType="number"
-            readOnly
-            value={Number(unitSubtotal).toFixed(2)}
-          /> */}
-            </div>
-
-            <div className="col-1 mb-2">
-              <button
-                type="button"
-                title="Adicionar"
-                className="btn btn-outline-success btn-sm pt-0 mt-2 mt-sm-4 fs-5"
-                onClick={handlePlusClick}
-              ><FaPlus /></button>
-            </div>
-          </div>
-
-          <h5 className="card-title mt-1">Peças adicionadas</h5>
-
-          <div className="table-responsive mb-1">
-            <table className="table table-sm table-striped table-bordered">
-              <thead className="fw-bold">
-                <tr>
-                  <th scope="col">Descrição</th>
-                  <th scope="col">OBS.</th>
-                  <th scope="col" className="text-center">Qtd.</th>
-                  <th scope="col" className="text-center">Valor</th>
-                  <th scope="col" className="text-center">Desconto</th>
-                  <th scope="col" className="text-center">Subtotal</th>
-                  <th scope="col" className="text-center">Ações</th>
-                </tr>
-              </thead>
-              <tbody id="table-body">
-
-              </tbody>
-            </table>
-          </div>
-
-          <div className="row">
-            <div className="col-6 col-md-4 col-lg-2">
-              <label className="mb-1" htmlFor="item-quantity">Qntd. peças</label><br />
-              <input
-                id="item-quantity"
-                type="number"
-                readOnly
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={itemQuantity}
-              />
-            </div>
-
-            <div className="col-6 col-md-4 col-lg-2">
-              <label className="mb-1" htmlFor="subtotal">Subtotal</label><br />
-              <input
-                id="subtotal"
-                type="number"
-                readOnly
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={Number(subtotal).toFixed(2)}
-              />
-            </div>
-
-            <div className="col-6 col-md-4 col-lg-2">
-              <label className="mb-1" htmlFor="discount">Desconto</label><br />
-              <input
-                id="discount"
-                type="number"
-                min={0}
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={discount}
-                onChange={e => {
-                  const newDiscount = Number(e.target.value.split(',').join('.'));
-                  setDiscount(newDiscount);
-                  setTotal(subtotal - (newDiscount + paymentMade));
-                }}
-              />
-            </div>
-
-            <div className="col-6 col-md-4 col-lg-2">
-              <label className="mb-1" htmlFor="paymentMade">Pgto. Efetuado</label><br />
-              <input
-                id="paymentMade"
-                type="number"
-                min={0}
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={paymentMade}
-                onChange={e => {
-                  const newPaymentMade = Number(e.target.value.split(',').join('.'));
-                  setPaymentMade(newPaymentMade);
-                  setTotal(subtotal - (newPaymentMade + discount));
-                }}
-              />
-            </div>
-
-            <div className="col-12 col-md-4 col-lg-2">
-              <label className="mb-1" htmlFor="total">Total</label><br />
-              <input
-                id="total"
-                type="number"
-                readOnly
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                value={Number(total).toFixed(2)}
-              />
-            </div>
-
-            <div className="col-12 col-md-4 col-lg-2">
               <div className="row">
-                <div className="col-6 col-md-6">
-                  <button
-                    type="button"
-                    className="btn btn-primary mt-2 mt-sm-4"
-                    onClick={handleNewClick}
-                  >Novo</button>
+                <div className="col-12 col-md-12 mb-2">
+                  <label className="mb-1" htmlFor="name">Cliente </label>
+                  <Select
+                    required
+                    id="name"
+                    styles={{
+                      container: (provided) => ({
+                        ...provided,
+                        width: '100%'
+                      })
+                    }}
+                    placeholder={'Selecione...'}
+                    value={customerId ? customerOptions.find(customer => customer.value === customerId) : { value: '0', label: 'Selecione...' }}
+                    isSearchable
+                    noOptionsMessage={() => 'Carregando...'}
+                    onChange={key => {
+                      if (key) setCustomerId(key.value);
+                    }}
+                    options={customerOptions}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-12 col-md-4 mb-2">
+                  <label className="mb-1" htmlFor="paymentType">Tipo de pagamento</label>
+                  <Select
+                    required
+                    id="paymentType"
+                    styles={{
+                      container: (provided) => ({
+                        ...provided,
+                        width: '100%'
+                      })
+                    }}
+                    value={paymentType}
+                    isSearchable
+                    onChange={key => {
+                      if (key) setPaymentType({ value: key.value, label: key.label });
+                    }}
+                    options={paymentTypeOptions}
+                  />
                 </div>
 
-                <div className="col-6 col-md-6 d-flex justify-content-end">
-                  <button
-                    type="button"
-                    className="btn btn-success mt-2 mt-sm-4"
-                    onClick={handleSaveClick}
-                    disabled={saveButtonIsDisabled}
-                  >Salvar</button>
+                <div className="col-12 col-md-4 mb-2">
+                  <label className="mb-1" htmlFor="paymentMoment">Pagamento</label>
+                  <Select
+                    required
+                    id="paymentMoment"
+                    styles={{
+                      container: (provided) => ({
+                        ...provided,
+                        width: '100%'
+                      })
+                    }}
+                    value={paymentMoment}
+                    isSearchable
+                    onChange={key => {
+                      if (key) setPaymentMoment({ value: key.value, label: key.label });
+                    }}
+                    options={paymentMomentOptions}
+                  />
+                </div>
+
+                <div className="col-12 col-md-4 mb-2">
+                  <label className="mb-1" htmlFor="delivery">Retirada</label><br />
+                  <input
+                    id="delivery"
+                    required
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    type="date"
+                    value={deliveryDate}
+                    onChange={e => setDeliveryDate(e.target.value)}
+                  />
                 </div>
               </div>
             </div>
-
           </div>
+        </div>
 
+        <div className="col-12 col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title mt-1 mb-0">Adicionar Peça</h5>
+
+              <div className="row">
+                <div className="col-12 col-md-6 mb-2">
+                  <label className="mb-1" htmlFor="item">Peça</label>
+                  <Select
+                    required
+                    id="item"
+                    maxMenuHeight={200}
+                    styles={{
+                      container: (provided) => ({
+                        ...provided,
+                        width: '100%'
+                      })
+                    }}
+                    placeholder={'Selecione...'}
+                    value={itemId ? itemOptions.find(item => item.value === itemId) : { value: '0', label: 'Selecione...' }}
+                    isSearchable
+                    noOptionsMessage={() => 'Carregando...'}
+                    onChange={key => {
+                      if (key) {
+                        setItemId(key.value);
+                        const newUnitCost = Number(itemOptions.find(item => item.value === key.value)?.cost);
+                        setUnitCost(newUnitCost);
+                        setUnitQuantity(1);
+                        setUnitDiscount(0);
+                        setUnitSubtotal(newUnitCost);
+                      }
+                    }}
+                    options={itemOptions}
+                  />
+                </div>
+
+                <div className="col-12 col-md-6 mb-2">
+                  <label className="mb-1" htmlFor="observation">Observação</label><br />
+                  <input
+                    id="observation"
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    type="text"
+                    value={observation}
+                    onChange={e => setObservation(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-6 col-md-4 mb-2">
+                  <label className="mb-1" htmlFor="unit-value">Valor unitário</label><br />
+                  <input
+                    id="unit-value"
+                    type="number"
+                    readOnly
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={Number(unitCost).toFixed(2)}
+                  />
+                </div>
+
+                <div className="col-6 col-md-4 mb-2">
+                  <label className="mb-1" htmlFor="unit-quantity">Quantidade</label><br />
+                  <input
+                    id="unit-quantity"
+                    type="number"
+                    min={1}
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={unitQuantity}
+                    onChange={e => {
+                      const newUnitQuantity = Number(e.target.value);
+                      setUnitQuantity(newUnitQuantity);
+                      setUnitSubtotal(unitCost * newUnitQuantity);
+                    }}
+                  />
+                </div>
+
+                <div className="col-6 col-md-4 mb-2">
+                  <label className="mb-1" htmlFor="unit-discount">Desconto</label><br />
+                  <input
+                    id="unit-discount"
+                    type="number"
+                    min={0}
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={unitDiscount}
+                    onChange={e => {
+                      const newUnitDiscount = Number(e.target.value.split(',').join('.'));
+                      setUnitDiscount(newUnitDiscount);
+                      setUnitSubtotal(unitSubtotal + unitDiscount - newUnitDiscount);
+                    }}
+                  />
+                </div>
+
+                <div className="col-6 col-md-4">
+                  <label className="mb-1" htmlFor="unit-sutotal">Subtotal</label>
+                  <input
+                    id="unit-sutotal"
+                    type="number"
+                    readOnly
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={Number(unitSubtotal).toFixed(2)}
+                  />
+                </div>
+
+                <div className="col-2 mt-0 mb-2 mt-md-1">
+                  <button
+                    type="button"
+                    title="Adicionar"
+                    className="btn btn-outline-success btn-sm pt-0 mt-2 mt-sm-4 fs-5"
+                    onClick={handlePlusClick}
+                  ><FaPlus /></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-md-12">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title mt-1">Peças Adicionadas</h5>
+
+              <div className="table-responsive mb-1">
+                <table className="table table-sm table-striped table-bordered">
+                  <thead className="fw-bold">
+                    <tr>
+                      <th scope="col">Descrição</th>
+                      <th scope="col">OBS.</th>
+                      <th scope="col" className="text-center">Qtd.</th>
+                      <th scope="col" className="text-center">Valor</th>
+                      <th scope="col" className="text-center">Desconto</th>
+                      <th scope="col" className="text-center">Subtotal</th>
+                      <th scope="col" className="text-center">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-body">
+
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="row">
+                <div className="col-6 col-md-4 col-lg-2">
+                  <label className="mb-1" htmlFor="item-quantity">Qntd. peças</label><br />
+                  <input
+                    id="item-quantity"
+                    type="number"
+                    readOnly
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={itemQuantity}
+                  />
+                </div>
+
+                <div className="col-6 col-md-4 col-lg-2">
+                  <label className="mb-1" htmlFor="subtotal">Subtotal</label><br />
+                  <input
+                    id="subtotal"
+                    type="number"
+                    readOnly
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={Number(subtotal).toFixed(2)}
+                  />
+                </div>
+
+                <div className="col-6 col-md-4 col-lg-2">
+                  <label className="mb-1" htmlFor="discount">Desconto</label><br />
+                  <input
+                    id="discount"
+                    type="number"
+                    min={0}
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={discount}
+                    onChange={e => {
+                      const newDiscount = Number(e.target.value.split(',').join('.'));
+                      setDiscount(newDiscount);
+                      setTotal(subtotal - (newDiscount + paymentMade));
+                    }}
+                  />
+                </div>
+
+                <div className="col-6 col-md-4 col-lg-2">
+                  <label className="mb-1" htmlFor="paymentMade">Pgto. Efetuado</label><br />
+                  <input
+                    id="paymentMade"
+                    type="number"
+                    min={0}
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={paymentMade}
+                    onChange={e => {
+                      const newPaymentMade = Number(e.target.value.split(',').join('.'));
+                      setPaymentMade(newPaymentMade);
+                      setTotal(subtotal - (newPaymentMade + discount));
+                    }}
+                  />
+                </div>
+
+                <div className="col-12 col-md-4 col-lg-2">
+                  <label className="mb-1" htmlFor="total">Total</label><br />
+                  <input
+                    id="total"
+                    type="number"
+                    readOnly
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    value={Number(total).toFixed(2)}
+                  />
+                </div>
+
+                <div className="col-12 col-md-4 col-lg-2">
+                  <div className="row">
+                    <div className="col-6 col-md-6">
+                      <button
+                        type="button"
+                        className="btn btn-primary mt-2 mt-sm-4"
+                        onClick={handleNewClick}
+                      >Novo</button>
+                    </div>
+
+                    <div className="col-6 col-md-6 d-flex justify-content-end">
+                      <button
+                        type="button"
+                        className="btn btn-success mt-2 mt-sm-4"
+                        onClick={handleSaveClick}
+                        disabled={saveButtonIsDisabled}
+                      >Salvar</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
   );
 }
