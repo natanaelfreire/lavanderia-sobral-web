@@ -297,12 +297,12 @@ export default function Orders() {
                       if (window.confirm('Mudar status do pedido para Retirado?')) await api.patch(`orders/${order.id}`, {
                         order_status: 'Retirado'
                       }).then(() => window.location.reload());
-                    }}>Marcar como Retirado</button> : 
+                    }}>Retirada</button> : 
                     <button onClick={async () => {
                       if (window.confirm('Mudar status do pedido para Pendente?')) await api.patch(`orders/${order.id}`, {
                         order_status: 'Pendente'
                       }).then(() => window.location.reload());
-                    }}>Marcar como Pendente</button>}
+                    }}>Pendente</button>}
                     <button onClick={async () => {
                       if (window.confirm('Deseja excluir pedido?')) await api.delete(`/orders/${order.id}`).then(response => {
                         if (response.status === 204) {
