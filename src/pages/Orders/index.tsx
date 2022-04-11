@@ -292,11 +292,17 @@ export default function Orders() {
                     <a href={"/download?orderId=" + order.id} target="_blank" rel="noreferrer"><button>Imprimir</button></a>
                     <a href={`/orders-edit/${order.id}`}><button>Editar peças</button></a>
                     <a href={"/make-payment/" + order.id}><button>Realizar pagamento</button></a>
+                    {order.order_status === "Pendente" ? 
                     <button onClick={async () => {
                       if (window.confirm('Mudar status do pedido para Retirado?')) await api.patch(`orders/${order.id}`, {
                         order_status: 'Retirado'
                       }).then(() => window.location.reload());
-                    }}></button>
+                    }}>Marcar como Retirado</button> : 
+                    <button onClick={async () => {
+                      if (window.confirm('Mudar status do pedido para Pendente?')) await api.patch(`orders/${order.id}`, {
+                        order_status: 'Pendente'
+                      }).then(() => window.location.reload());
+                    }}>Marcar como Pendente</button>}
                     <button onClick={async () => {
                       if (window.confirm('Deseja excluir pedido?')) await api.delete(`/orders/${order.id}`).then(response => {
                         if (response.status === 204) {
