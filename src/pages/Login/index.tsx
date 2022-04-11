@@ -10,7 +10,7 @@ export default function Login() {
 
   async function handleLogin(e: FormEvent) {
     e.preventDefault();
-    signIn(userInput, passwordInput);
+    await signIn(userInput, passwordInput);
   }
 
   return (

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { FiRepeat } from 'react-icons/fi';
 import { IoShirtOutline } from 'react-icons/io5';
-import { ToastContainer } from 'react-toastify';
 import Dropdown from "react-bootstrap/Dropdown";
 
 import logo from '../../assets/images/mini-logo.png';
@@ -233,71 +232,8 @@ const Menu: React.FC = ({ children }) => {
       </aside>
 
       <main id="main" className="main">
-        {children}
-        <ToastContainer theme="colored" />
+        {children}        
       </main>
-
-      {/* <div className="row flex-nowrap">
-        <div className="col-2 col-sm-4 col-md-3 col-lg-2 col-xl-2 px-sm-2 px-0 bg-dark">
-          <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-            <Link to="/" className="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-              <span className="fs-5 d-none d-sm-inline">Lavanderia Sobral</span>
-            </Link>
-            <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-              <li className="nav-item">
-                <Link to="/create-order" className="nav-link align-middle text-warning border border-warning rounded px-3 pt-0 pb-1">
-                  <i className="fs-5"><FaPlus /></i> <span className="ms-1 d-none d-sm-inline">Criar Pedido</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/" className="nav-link align-middle px-0">
-                  <i className="fs-5"><AiFillHome /></i> <span className="ms-1 d-none d-sm-inline">Home</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/customers" className="nav-link align-middle px-0">
-                  <i className="fs-5"><FiUsers /></i> <span className="ms-1 d-none d-sm-inline">Clientes</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/items" className="nav-link px-0 align-middle">
-                  <i className="fs-5"><IoShirtOutline /></i> <span className="ms-1 d-none d-sm-inline">Peças</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/orders" className="nav-link px-0 align-middle">
-                  <i className="fs-5"><FiEdit /></i> <span className="ms-1 d-none d-sm-inline">Pedidos</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/processing" className="nav-link px-0 align-middle">
-                  <i className="fs-5"><FiRepeat /></i> <span className="ms-1 d-none d-sm-inline">Entradas e Saídas</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/payment" className="nav-link px-0 align-middle">
-                  <i className="fs-5"><BiMoney /></i> <span className="ms-1 d-none d-sm-inline">Não Pagos</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/financial" className="nav-link px-0 align-middle">
-                  <i className="fs-5"><RiMoneyDollarCircleLine /></i> <span className="ms-1 d-none d-sm-inline">Financeiro</span>
-                </Link>
-              </li>
-            </ul>
-            <hr />
-            <div className="pb-4 text-center">
-              <span className="d-flex align-items-center justify-content-center text-white text-decoration-none">
-                <i className="fs-4"><BiUserCircle /></i>
-                <span className="d-none d-sm-inline mx-1">{user}</span>
-              </span>
-              <button className="btn btn-danger text-white py-0 px-1" onClick={handleLogout}>Sair</button>
-            </div>
-          </div>
-        </div>
-        
-      </div> */}
-
 
     </div>
   );

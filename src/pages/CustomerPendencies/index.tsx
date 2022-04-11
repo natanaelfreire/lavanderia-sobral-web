@@ -76,10 +76,12 @@ export default function CustomerPendencies() {
     { value: '3', label: 'Pix' },
   ]);
 
-  const [paidValue, setPaidValue] = useState(0);
+  const [paidValue, setPaidValue] = useState('');
+  const [discountValue, setDiscountValue] = useState('0');
+  const [valueToPay, setValueToPay] = useState('');
 
   useEffect(() => {
-    api.get(`/customers/pendencies/${id}`).then(response => {
+    api.get<Pendencies>(`/customers/pendencies/${id}`).then(response => {
       if (response.status === 200) {
         const pendencias = response.data;
 
@@ -106,17 +108,32 @@ export default function CustomerPendencies() {
       paymentDivRef.current.scrollIntoView({ behavior: "smooth" });
   }
 
+  function handleDiscountChange(e: React.FormEvent<HTMLInputElement>) {
+    const newDiscountValue = e.currentTarget.value;
+    setDiscountValue(newDiscountValue);
+
+    const discount = isNaN(parseFloat(newDiscountValue.replace(',', '.'))) ? 0 : parseFloat(newDiscountValue.replace(',', '.'));
+    if (discount >= 0) {
+      const cost = isNaN(parseFloat(orderData?.cost as string)) ? 0 : parseFloat(orderData?.cost as string);
+      const newValueToPay = cost - discount;
+      setValueToPay(newValueToPay < 0 ? '0' : formataValorDecimal(newValueToPay.toString()));
+      setPaidValue(newValueToPay < 0 ? '0' : formataValorDecimal(newValueToPay.toString()));
+    }
+  }
+
   function loadModalReceive(idModal: string) {
     setModalReceiveIsOpen(true);
     setLoadingModalData(true);
 
     if (idModal) {
-      api.get(`orders/${idModal}`).then(response => {
+      api.get<OrderData>(`orders/${idModal}`).then(response => {
         if (response.status === 200) {
           const data = response.data;
           setOrderData(data);
           setIdModalReceive(idModal);
-          setPaidValue(parseFloat(response.data?.cost as string));
+          setDiscountValue('0');
+          setPaidValue(formataValorDecimal(data.cost as string));
+          setValueToPay(formataValorDecimal(data.cost as string));
           setLoadingModalData(false);
           scrollToBottom();
         }
@@ -125,7 +142,7 @@ export default function CustomerPendencies() {
         setLoadingModalData(false);
         setOrderData(undefined);
         setIdModalReceive('');
-        setPaidValue(parseFloat('0'));
+        setPaidValue('0');
       })
     }
   }
@@ -136,7 +153,13 @@ export default function CustomerPendencies() {
       return;
     }
 
-    if (!paidValue || (paidValue <= 0)) {
+    if (parseFloat(discountValue.replace(',', '.')) < 0) {
+      toast.error('Desconto aplicado inválido!');
+      return;
+    }
+      
+
+    if (!paidValue || isNaN(parseFloat(paidValue.replace(',', '.'))) || parseFloat(paidValue.replace(',', '.')) < 0) {
       toast.error('Valor recebido inválido!');
       return;
     }
@@ -146,6 +169,7 @@ export default function CustomerPendencies() {
 
       let newPaymentStatus = orderData.payment_status;
       let newCost = parseFloat(orderData.cost);
+      let newDiscount = isNaN(parseFloat(discountValue.replace(',', '.'))) ? 0 : parseFloat(discountValue.replace(',', '.'));
 
       if (parseFloat(orderData.cost) <= Number(paidValue)) {
         newPaymentStatus = 'Pago';
@@ -165,7 +189,7 @@ export default function CustomerPendencies() {
         delivery_date: orderData.delivery_date,
         item_quantity: orderData.item_quantity,
         subtotal: orderData.subtotal,
-        discount: orderData.discount,
+        discount: orderData.discount + newDiscount,
         payment_made: Number(orderData.payment_made) + Number(paidValue),
         cost: newCost,
         created_at: orderData.created_at,
@@ -180,7 +204,8 @@ export default function CustomerPendencies() {
             setModalReceiveIsOpen(false);
             setOrderData(undefined);
             setIdModalReceive('');
-            setPaidValue(parseFloat('0'));
+            setPaidValue('0');
+            setDiscountValue('0');
             setConfirmReceiveIsDisabled(false);
             setCount(count + 1);
 
@@ -203,6 +228,10 @@ export default function CustomerPendencies() {
     return (parseFloat(value)).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
   }
 
+  function formataValorDecimal(value: string) {
+    return (parseFloat(value)).toLocaleString('pt-br', { minimumFractionDigits: 2 });
+  }
+
   return (
     <div className="pendencies" id="pendencies">
       <div className="pagetitle" style={{ color: "#012970" }}>
@@ -223,7 +252,7 @@ export default function CustomerPendencies() {
 
               <div className="mb-2">
                 <h5 className="card-title">Pendências de pagamento de</h5>
-                <div className="card-subtitle-pendencies d-flex justify-content-between align-items-end">{customerName} <button title="Imprimir Todos" className="btn btn-sm btn-light border border-dark"><i className="bi bi-printer"></i></button></div>
+                <div className="card-subtitle-pendencies d-flex justify-content-between align-items-end">{customerName} <button title="Imprimir Todos" className={`btn btn-sm btn-light border border-dark ${pendencies && pendencies.length > 0 ? '' : 'd-none'}`}><i className="bi bi-printer"></i></button></div>
               </div>
 
               <div className="activity">
@@ -316,126 +345,186 @@ export default function CustomerPendencies() {
         </div>
       </div>
 
-      <Modal show={modalReceiveIsOpen} size="lg" onHide={() => setModalReceiveIsOpen(false)}>
+      <Modal show={modalReceiveIsOpen} size="xl" onHide={() => setModalReceiveIsOpen(false)}>
         <Modal.Header>
           <Modal.Title>
             Confirmação Recebimento nº {idModalReceive}
           </Modal.Title>
+          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setModalReceiveIsOpen(false)}></button>
         </Modal.Header>
 
         {loadingModalData ?
-          <Modal.Body className="text-center">
+          <Modal.Body className="text-center" style={{ backgroundColor: '#ECF0F5' }}>
             <Spinner animation="border" role="status" />
           </Modal.Body> :
-          <Modal.Body>
+          <Modal.Body style={{ backgroundColor: '#ECF0F5' }}>
             <div className="row">
-              <div className="col-12">
-                <table style={{ width: '100%', backgroundColor: '#f2f2f2' }} className="tabelaReceber">
-                  <thead>
-                    <tr className="fw-bold">
-                      <td style={{ textAlign: 'center' }}>Qtd</td>
-                      <td>Peça</td>
-                      <td style={{ textAlign: 'right' }}>Desc.</td>
-                      <td style={{ textAlign: 'right' }}>Valor Unit</td>
-                      <td style={{ textAlign: 'right' }}>Subtotal</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      orderData ? orderData.items.map(item => (
-                        <tr key={item.item_id}>
-                          <td style={{ textAlign: 'center' }}>{item.unit_quantity}</td>
-                          <td>{item.description}</td>
-                          <td style={{ textAlign: 'right' }}>{item.unit_discount}</td>
-                          <td style={{ textAlign: 'right' }}>{moneyFormat(item.unit_cost)}</td>
-                          <td style={{ textAlign: 'right' }}>{moneyFormat(item.unit_subtotal)}</td>
+              <div className="col-12 col-md-8">
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">Extrato</h5>
+                    <table style={{ width: '100%', backgroundColor: '#fff' }} className="table table-sm">
+                      <thead>
+                        <tr className="fw-bold">
+                          <th style={{ textAlign: 'center' }}>Qtd</th>
+                          <th>Peça</th>
+                          <th style={{ textAlign: 'right' }}>Desc.</th>
+                          <th style={{ textAlign: 'right' }}>Valor Unit</th>
+                          <th style={{ textAlign: 'right' }}>Subtotal</th>
                         </tr>
-                      )) :
-                        <tr>
-                          <td colSpan={5}></td>
-                        </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-4 col-md-6">
+                      </thead>
+                      <tbody>
+                        {
+                          orderData ? orderData.items.map(item => (
+                            <tr key={item.item_id}>
+                              <td style={{ textAlign: 'center' }}>{item.unit_quantity}</td>
+                              <td>{item.description}</td>
+                              <td style={{ textAlign: 'right' }}>{item.unit_discount}</td>
+                              <td style={{ textAlign: 'right' }}>{moneyFormat(item.unit_cost)}</td>
+                              <td style={{ textAlign: 'right' }}>{moneyFormat(item.unit_subtotal)}</td>
+                            </tr>
+                          )) :
+                            <tr>
+                              <td colSpan={5}></td>
+                            </tr>
+                        }
+                      </tbody>
+                    </table>
+
+                    <div className="row d-flex justify-content-end">
+                      <div className="col-12 col-md-6">
+                        <table style={{ width: '100%', backgroundColor: '#fff' }} className="table table-sm">
+                          <tbody>
+                            <tr>
+                              <td style={{ textAlign: 'right' }}>Subtotal: </td>
+                              <td style={{ textAlign: 'right' }}>{orderData ? moneyFormat(orderData.subtotal) : 0}</td>
+                            </tr>
+                            <tr>
+                              <td style={{ textAlign: 'right' }}>Desconto: </td>
+                              <td style={{ textAlign: 'right' }}>{orderData ? moneyFormat(orderData.discount) : 0}</td>
+                            </tr>
+                            <tr>
+                              <td style={{ textAlign: 'right' }}>Pagamento Prévio: </td>
+                              <td style={{ textAlign: 'right' }}>{orderData ? moneyFormat(orderData.payment_made) : 0}</td>
+                            </tr>
+                            <tr>
+                              <td style={{ textAlign: 'right' }}><strong>Valor Total:</strong></td>
+                              <td style={{ textAlign: 'right' }}><strong>{orderData ? moneyFormat(orderData.cost) : 0}</strong></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
 
               </div>
-              <div className="col-8 col-md-6">
-                <table style={{ width: '100%', backgroundColor: '#f2f2f2', borderTop: 'none' }} className="tabelaReceber">
-                  <tbody>
-                    <tr>
-                      <td>Subtotal: </td>
-                      <td style={{ textAlign: 'right' }}>{orderData ? moneyFormat(orderData.subtotal) : 0}</td>
-                    </tr>
-                    <tr>
-                      <td>Desconto: </td>
-                      <td style={{ textAlign: 'right' }}>{orderData ? moneyFormat(orderData.discount) : 0}</td>
-                    </tr>
-                    <tr>
-                      <td>Pagamento Prévio: </td>
-                      <td style={{ textAlign: 'right' }}>{orderData ? moneyFormat(orderData.payment_made) : 0}</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Total:</strong></td>
-                      <td style={{ textAlign: 'right' }}><strong>{orderData ? moneyFormat(orderData.cost) : 0}</strong></td>
-                    </tr>
-                  </tbody>
-                </table>
+
+              <div className="col-12 col-md-4">
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">Dados Pagamento</h5>
+                    <div className="row" ref={paymentDivRef}>
+                      <div className="col-12 mb-2">
+                        <label className="mb-1" htmlFor="paymentType">Método de pagamento</label>
+                        <Select
+                          required
+                          id="paymentType"
+                          placeholder={'Selecione...'}
+                          styles={{
+                            container: (provided) => ({
+                              ...provided,
+                              width: '100%'
+                            })
+                          }}
+                          value={paymentType}
+                          isSearchable
+                          onChange={key => {
+                            if (key) setPaymentType({ value: key.value, label: key.label });
+                          }}
+                          options={paymentTypeOptions}
+                        />
+                      </div>
+                      <div className="col-12 mb-2">
+                        <label className="mb-1" htmlFor="valorDesconto" style={{ color: '#00a65a' }}>Aplicar Desconto</label>
+                        <input
+                          id="valorDesconto"
+                          className="py-1 px-2"
+                          style={{
+                            width: '100%',
+                            borderColor: '#00a65a',
+                            borderRadius: '4px',
+                            borderStyle: 'solid',
+                            borderWidth: '1px',
+                            outline: 'none'
+                          }}
+                          type="text"
+                          value={discountValue}
+                          onChange={handleDiscountChange}
+                        />
+                      </div>
+                      <div className="col-12 mb-2">
+                        <label className="mb-1" htmlFor="valorAPagar">Valor a Pagar</label>
+                        <input
+                          id="valorAPagar"
+                          className="py-1 px-2"
+                          style={{
+                            width: '100%',
+                            borderRadius: '4px',
+                            borderStyle: 'solid',
+                            borderWidth: '1px',
+                            outline: 'none'
+                          }}
+                          type="text"
+                          value={valueToPay}
+                          disabled
+                          onChange={e => {
+                            const newValueToPay = e.target.value;
+                            setValueToPay(newValueToPay);
+                          }}
+                        />
+                      </div>
+                      <div className="col-12 mb-2">
+                        <label className="fw-bold mb-1" htmlFor="valorPago" style={{ color: '#00a65a' }}>Valor Recebido</label>
+                        <input
+                          id="valorPago"
+                          step={0.01}
+                          className="py-1 px-2"
+                          style={{
+                            width: '100%',
+                            borderColor: '#00a65a',
+                            borderRadius: '4px',
+                            borderStyle: 'solid',
+                            borderWidth: '1px',
+                            outline: 'none'
+                          }}
+                          type="text"
+                          value={paidValue}
+                          onChange={e => {
+                            const newPaidValue = e.target.value;
+                            setPaidValue(newPaidValue);
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <Modal.Footer>
+                      <button type="button" className="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal" onClick={() => setModalReceiveIsOpen(false)}>Cancelar</button>
+                      <button type="button" className="btn btn-primary btn-lg btn-block fs-6 text-decoration-none col-6 m-0 rounded-0 border border-top-0" disabled={confirmReceiveIsDisabled} onClick={handleConfirmReceive}><strong>Confirmar Recebimento</strong></button>
+                    </Modal.Footer>
+                  </div>
+                </div>
               </div>
+
+
             </div>
-            <div className="row" ref={paymentDivRef}>
-              <div className="col-12 col-md-6 mt-2">
-                <label className="mt-2" htmlFor="paymentType">Método de pagamento</label>
-                <Select
-                  required
-                  id="paymentType"
-                  placeholder={'Selecione...'}
-                  styles={{
-                    container: (provided) => ({
-                      ...provided,
-                      width: '100%'
-                    })
-                  }}
-                  value={paymentType}
-                  isSearchable
-                  onChange={key => {
-                    if (key) setPaymentType({ value: key.value, label: key.label });
-                  }}
-                  options={paymentTypeOptions}
-                />
-              </div>
-              <div className="col-12 col-md-6 mt-2">
-                <label className="text-success fw-bold fs-5" htmlFor="valorPago">Valor Recebido</label>
-                <input
-                  id="valorPago"
-                  className="py-1 px-2 fs-5 text-success"
-                  style={{
-                    width: '100%',
-                    borderColor: '#2eca6a',
-                    borderRadius: '4px',
-                    borderStyle: 'solid',
-                    borderWidth: '1px',
-                    outline: 'none'
-                  }}
-                  type="number"
-                  value={paidValue}
-                  onChange={e => {
-                    const newPaidValue = Number(e.target.value);
-                    setPaidValue(newPaidValue);
-                  }}
-                />
-              </div>
-            </div>
+
+
           </Modal.Body>
         }
 
-        <Modal.Footer>
-          <button type="button" className="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal" onClick={() => setModalReceiveIsOpen(false)}>Não</button>
-          <button type="button" className="btn btn-primary btn-lg btn-block fs-6 text-decoration-none col-6 m-0 rounded-0 border border-top-0" disabled={confirmReceiveIsDisabled} onClick={handleConfirmReceive}><strong>Confirmar Recebimento</strong></button>
-        </Modal.Footer>
+
       </Modal>
 
     </div>

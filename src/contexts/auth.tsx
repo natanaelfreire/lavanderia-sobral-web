@@ -1,4 +1,6 @@
 import React, { createContext, CSSProperties, useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import api from '../services/api';
 import * as auth from '../services/auth';
 
 const styles: CSSProperties = {
@@ -25,7 +27,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     const storageToken = localStorage.getItem('@lavanderia:token');
 
     if (storageUser && storageToken) {
-      // api.defaults.headers['Authorization'] = `Bearer ${storageToken}`;
+      api.defaults.headers['Authorization'] = `Bearer ${storageToken}`;
       setUser(JSON.parse(storageUser));
       setLoading(false);    
     }
@@ -40,7 +42,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     return (
       <div style={styles}>
         <main>
-          <h1>Carregando...</h1>
+          <h2>Carregando...</h2>
         </main>
       </div>
     );
@@ -49,17 +51,22 @@ export const AuthProvider: React.FC = ({ children }) => {
   async function signIn(user: string, password: string) {
     const response = await auth.signIn(user, password);
 
-    setUser(response.user);
+    if (response) {
+      api.defaults.headers['Authorization'] = `Bearer ${response.token}`;
 
-    // api.defaults.headers['Authorization'] = `Bearer ${response.token}`;
-
-    localStorage.setItem('@lavanderia:user', JSON.stringify(response.user));
-    localStorage.setItem('@lavanderia:token', response.token);
+      localStorage.setItem('@lavanderia:user', JSON.stringify(response.user));
+      localStorage.setItem('@lavanderia:token', response.token);
+  
+      setUser(response.user);
+    }
+    else
+      toast.error('Usuário ou Senha errado');
   }
 
   return (
     <AuthContext.Provider value={{signed: !!user, user, signIn}}>
       {children}
+      <ToastContainer theme="colored" />
     </AuthContext.Provider>
   );
  };
