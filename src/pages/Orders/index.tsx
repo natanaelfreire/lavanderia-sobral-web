@@ -293,6 +293,11 @@ export default function Orders() {
                     <a href={`/orders-edit/${order.id}`}><button>Editar peças</button></a>
                     <a href={"/make-payment/" + order.id}><button>Realizar pagamento</button></a>
                     <button onClick={async () => {
+                      if (window.confirm('Mudar status do pedido para Retirado?')) await api.patch(`orders/${order.id}`, {
+                        order_status: 'Retirado'
+                      }).then(() => window.location.reload());
+                    }}></button>
+                    <button onClick={async () => {
                       if (window.confirm('Deseja excluir pedido?')) await api.delete(`/orders/${order.id}`).then(response => {
                         if (response.status === 204) {
                           window.location.reload();
