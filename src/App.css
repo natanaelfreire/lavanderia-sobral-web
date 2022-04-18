@@ -320,7 +320,7 @@ body {
   top: 60px;
   left: 0;
   bottom: 0;
-  width: 270px;
+  width: 260px;
   z-index: 996;
   transition: all 0.3s;
   padding: 20px;
@@ -346,7 +346,7 @@ body {
 
 @media (min-width: 1200px) {
   #main, #footer {
-    margin-left: 270px;
+    margin-left: 260px;
   }
 }
 @media (max-width: 1199px) {

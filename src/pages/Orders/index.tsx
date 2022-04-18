@@ -1,42 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router';
-import { FiX } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 import Select from 'react-select';
-import Input from '../../components/Input';
 
 import api from '../../services/api';
-
-import './styles.css';
-
-interface Item {
-  description: string;
-  item_id: string;
-  observation: string;
-  order_id: number;
-  unit_cost: number;
-  unit_discount: number;
-  unit_quantity: number;
-  unit_subtotal: number;
-};
+import { Spinner } from 'react-bootstrap';
 
 interface Order {
   id: number;
-  order_status: string;
+  customer: string;
   payment_status: string;
-  payment_type: string;
-  payment_moment: string;
+  order_status: string;
   delivery_date: string;
   item_quantity: number;
-  subtotal: number;
-  discount: number;
-  payment_made: number;
   cost: number;
   created_at: string;
-  date_number: number;
-  date_out_number: number;
   created_hours: number;
-  customer_id: number; 
+  customer_id: number;
 };
 
 interface Customer {
@@ -44,38 +24,29 @@ interface Customer {
   label: string;
 };
 
-interface FilteredCustomer {
-  [id: string]: {
-    name: string;
-    address: string;
-    phone: string;
-  }
-};
-
 export default function Orders() {
-  const [ customerId, setCustomerId ] = useState('');
-  const [ orderId, setOrderId ] = useState('');
-  const [ paymentStatus, setPaymentStatus ] = useState<{value: string; label: string;}>();
-  const [ orderStatus, setOrderStatus ] = useState<{value: string; label: string;}>();
-  const [ filteredOrders, setFilteredOrders ] = useState<{orders: Order[], itemAddedByOrderId: Item[][], customerByOrderId: FilteredCustomer}>();
+  const [page, setPage] = useState(1);
+  const [customerId, setCustomerId] = useState('');
+  const [orderId, setOrderId] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState<{ value: string; label: string; } | null>(null);
+  const [orderStatus, setOrderStatus] = useState<{ value: string; label: string; } | null>(null);
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>();
+  const [loadingData, setLoadingData] = useState(true);
 
-  const [ dateStart, setDateStart ] = useState('');
-  const [ dateEnd, setDateEnd ] = useState('');
-  
-  const [ customerOptions, setCustomerOptions ] = useState<Customer[]>([]);
-  const [ paymentStatusOptions ] = useState([
+  const [dateCreated, setDateCreated] = useState('');
+  const [dateDelivery, setDateDelivery] = useState('');
+
+  const [customerOptions, setCustomerOptions] = useState<Customer[]>([]);
+  const [paymentStatusOptions] = useState([
     { value: '1', label: 'Não pago' },
     { value: '2', label: 'Parcialmente pago' },
     { value: '3', label: 'Pago' }
   ]);
-  const [ orderStatusOptions ] = useState([
+  const [orderStatusOptions] = useState([
     { value: '1', label: 'Pendente' },
-    { value: '2', label: 'Coletado' }
+    { value: '2', label: 'Coletado' },
+    { value: '3', label: 'Retirado' }
   ]);
-  
-  const search = useLocation().search;
-  const searchCustomerId = new URLSearchParams(search).get('customerId');
-  const searchOrderId = new URLSearchParams(search).get('orderId');
 
   useEffect(() => {
     api.get('customers').then(response => {
@@ -101,211 +72,261 @@ export default function Orders() {
   }, []);
 
   useEffect(() => {
-    if (searchCustomerId) {
-      setCustomerId(searchCustomerId);
-      
-      api.get('orders', {
-        params: {
-          customerId: searchCustomerId
-        }
-      }).then(response => {
-        if (response.status === 200) {
-          const data = response.data;
-          setFilteredOrders(data);
-        }
-      })
-    }
-  }, [searchCustomerId]);
+    setLoadingData(true);
 
-  useEffect(() => {
-    if (searchOrderId) {
-      api.get('orders', {
-        params: {
-          orderId: searchOrderId
-        }
-      }).then(response => {
-        if (response.status === 200) {
-          const data = response.data;
-          setFilteredOrders(data);
-        }
-      })
-    }
-  }, [searchOrderId]);
-
-  function handleOrdersFilterClick() {
-    api.get('orders', {
-      params: {
-        customerId: customerId? customerId : searchCustomerId,
-        orderId,
-        paymentStatus: paymentStatus?.label,
-        orderStatus: orderStatus?.label,
-        dateStart,
-        dateEnd
-      }
+    api.post('orders/listagem', {
+      orderId: null,
+      customerId: null,
+      dateCreated: null,
+      dateDelivery: null,
+      orderStatus: null,
+      paymentStatus: null,
+      page: 1
     }).then(response => {
       if (response.status === 200) {
-        const data = response.data;       
+        const data = response.data;
         setFilteredOrders(data);
+        setLoadingData(false);
       }
-    });
+    })
+  }, []);
+
+  function handleOrdersFilterClick() {
+    setLoadingData(true);
+
+    api.post('orders/listagem', {
+      orderId: orderId ? orderId : null,
+      customerId: customerId ? customerId : null,
+      dateCreated: dateCreated ? dateCreated : null,
+      dateDelivery: dateDelivery ? dateDelivery : null,
+      orderStatus: orderStatus ? orderStatus.label : null,
+      paymentStatus: paymentStatus ? paymentStatus.label : null,
+      page: page
+    }).then(response => {
+      if (response.status === 200) {
+        const data = response.data;
+        setFilteredOrders(data);
+        setLoadingData(false);
+      }
+    })
   }
 
   return (
-    <div className="page-orders">
+    <div className="">
 
-      <main className="main-content">
-        <h1>Preencha algum campo para fazer a filtragem...</h1>
+      <div className="pagetitle" style={{ color: "#012970" }}>
+        <h4>Pedidos</h4>
+        <nav>
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+            <li className="breadcrumb-item active">Pedidos</li>
+          </ol>
+        </nav>
+      </div>
 
-        <div className="block">
-          <label htmlFor="name"style={{paddingBottom: '8px'}}>Cliente: </label>
-          <div className="select" style={{width: '100%'}}>
-            <Select
-              id="name" 
-              placeholder={'Selecione...'}
-              isSearchable
-              isClearable
-              noOptionsMessage={() => 'Carregando...'}
-              onChange={key => {
-                if (key) setCustomerId(key.value); else setCustomerId('');
-              }}
-              options={customerOptions}
-            />
+      <div className="card">
+        <div className="card-body">
+          <div className="d-flex justify-content-between mb-2">
+            <h5 className="card-title">Filtros</h5>
           </div>
-        </div>
 
-        <div className="block">
-          <Input 
-            label="Cód. do pedido: " 
-            name="order-code" 
-            inputType="number" 
-            value={orderId}
-            onChange={e => setOrderId(e.target.value)}
-          />
-
-          <label htmlFor="payment-status" style={{width: 'max-content'}}>Status do pagamento: </label>
-          <div className="select" style={{width: '60%', marginTop: '5px'}}>
-              <Select 
-                id="payment-status" 
-                placeholder={'Selecione...'}
-                isSearchable
-                defaultValue={paymentStatus}
-                onChange={key => {
-                  if (key) setPaymentStatus(key); else setPaymentStatus(undefined);
-                }}
-                isClearable
-                options={paymentStatusOptions}
-              />
-          </div>          
-          <label htmlFor="oder-status" style={{width: 'max-content'}}>Status da coleta: </label>
-          <div className="select" style={{width: '60%', marginTop: '5px'}}>
+          <div className="row">
+            <div className="col-12 col-md-6 mb-2">
+              <label className="mb-1" htmlFor="name">Cliente </label>
               <Select
-                placeholder={'Selecione...'}
-                id="oder-status" 
-                isSearchable
-                defaultValue={orderStatus}
-                onChange={key => {
-                  if (key) setOrderStatus(key); else setOrderStatus(undefined);
+                required
+                id="name"
+                styles={{
+                  container: (provided) => ({
+                    ...provided,
+                    width: '100%'
+                  })
                 }}
-                isClearable
-                options={orderStatusOptions}
+                placeholder={'Selecione...'}
+                value={customerId ? customerOptions.find(customer => customer.value === customerId) : { value: '0', label: 'Selecione...' }}
+                isSearchable
+                noOptionsMessage={() => 'Carregando...'}
+                onChange={key => {
+                  if (key) setCustomerId(key.value);
+                }}
+                options={customerOptions}
               />
-          </div>
-        </div>
-
-        <h2>Intervalo de datas (opcional):</h2>
-
-        <div className="date-interval">
-          <div className="date-input">
-            <Input 
-              label="Data início: " 
-              name="date-start" 
-              inputType="date" 
-              value={dateStart}
-              onChange={e => setDateStart(e.target.value)}
-            />
-            <button onClick={() => setDateStart('')}><FiX color={'black'}/></button>
-          </div>
-          
-          <div className="date-input">
-            <Input 
-              label="Data final: " 
-              name="date-end" 
-              inputType="date" 
-              value={dateEnd}
-              onChange={e => setDateEnd(e.target.value)}
-            />
-            <button onClick={() => setDateEnd('')}><FiX color={'black'} /></button>
-          </div>
-        </div>
-
-        <button 
-          type="button" 
-          className="filter-button"
-          onClick={handleOrdersFilterClick}
-        >Filtrar</button>
-
-        <div className="display-orders">
-          {filteredOrders? (<div>
-            <div className="head-order-field">
-              <p className="order-info">Pedido</p>
-              <p className="customer-info">Cliente</p>
-              <p className="delivery-date">Data da Retirada</p>
-              <p className="additional-info">Infos Adicionais</p>
-              <p className="order-actions-head">Ações</p>
             </div>
 
-            {filteredOrders.orders.length !== 0 ? filteredOrders.orders.map(order => (
-                <div className="order-field" key={order.id}>
-                  <div className="order-info">
-                    <p className={order.payment_status === 'Não pago' ? "payment-status-not-paid": order.payment_status === 'Pago' ? "payment-status-paid" : "payment-status-partially"}>{order.payment_status.toUpperCase()}</p>
-                    <p><span>Cód do pedido: </span>{order.id}</p>
-                    <p><span>Criado em: </span>{order.created_at}</p>
-                    <p>-----------------------------------</p>
-                      {filteredOrders.itemAddedByOrderId[order.id].map(item => (
-                        <p key={item.item_id}>{Number(item.unit_quantity).toFixed(0)}x {item.description} - disc.{String(item.unit_discount).split('.').join(',')} - R${Number(item.unit_subtotal).toFixed(2).split('.').join(',')}</p>
-                      ))}
-                    <p>-----------------------------------</p>
-                    <p><span>Subtotal: </span>R${Number(order.subtotal).toFixed(2).split('.').join(',')}</p>
-                    <p><span>Disconto aplicado: </span>{Number(order.discount).toFixed(2).split('.').join(',')}</p>
-                    <p><span>Pagamento efetuado: </span>R${Number(order.payment_made).toFixed(2).split('.').join(',')}</p>
-                    <p><span>{order.payment_status === 'Parcialmente pago'? "Falta pagar: " : "Total a pagar: "}</span>R${Number(order.cost).toFixed(2).split('.').join(',')}</p>
-                  </div>
-                  
-                  <div className="customer-info">
-                    <p><span>{filteredOrders.customerByOrderId[String(order.id)].name.toUpperCase()}</span></p>
-                    <p><span>Endereço: </span>{filteredOrders.customerByOrderId[String(order.id)].address}</p>
-                    <p><span>Telefone: </span>{filteredOrders.customerByOrderId[String(order.id)].phone}</p>
-                  </div>
+            <div className="col-5 col-md-2 mb-2">
+              <label className="mb-1" htmlFor="filter-created">Data Cadastro</label>
+              <input
+                id="filter-created"
+                required
+                className="py-1 px-2"
+                style={{
+                  width: '100%',
+                  borderColor: '#ccc',
+                  borderRadius: '4px',
+                  borderStyle: 'solid',
+                  borderWidth: '1px',
+                }}
+                type="date"
+                value={dateCreated}
+                onChange={e => setDateCreated(e.target.value)}
+              />
+            </div>
+            <div className='col-1 col-md-1 mb-2 mt-4' style={{ marginLeft: '-2px' }}>
+              <button className='btn btn-sm btn-outline-secondary mt-2' onClick={() => setDateCreated('')}>X</button>
+            </div>
 
-                  <div className="delivery-date">
-                    <p>{order.delivery_date.split('-').reverse().join('/')}</p>
-                  </div>
+            <div className="col-5 col-md-2 mb-2">
+              <label className="mb-1" htmlFor="filter-delivery">Data Retirada</label>
+              <input
+                id="filter-delivery"
+                required
+                className="py-1 px-2"
+                style={{
+                  width: '100%',
+                  borderColor: '#ccc',
+                  borderRadius: '4px',
+                  borderStyle: 'solid',
+                  borderWidth: '1px',
+                }}
+                type="date"
+                value={dateDelivery}
+                onChange={e => {
+                  setDateDelivery(e.target.value)
+                }}
+              />
+            </div>
+            <div className='col-1 col-md-1 mb-2 mt-4' style={{ marginLeft: '-5px' }}>
+              <button className='btn btn-sm btn-outline-secondary mt-2' onClick={() => setDateDelivery('')}>X</button>
+            </div>
 
-                  <div className="additional-info">
-                    <p className={order.order_status === 'Pendente' ? "order-status-pending" : "order-status-collected"}>{order.order_status}</p>
-                    <p><span>Tipo pagamento: </span>{order.payment_type}</p>
-                  </div>
+            <div className="col-6 col-md-3 mb-2">
+              <label className="mb-1" htmlFor="orderCode">Código do Pedido</label>
+              <input
+                id="orderCode"
+                className="py-1 px-2"
+                style={{
+                  width: '100%',
+                  borderColor: '#ccc',
+                  borderRadius: '4px',
+                  borderStyle: 'solid',
+                  borderWidth: '1px',
+                }}
+                type="number"
+                value={orderId}
+                onChange={e => setOrderId(e.target.value)}
+              />
+            </div>
 
-                  <div className="order-actions" id={String(order.id)}>
-                    <a href={"/download?orderId=" + order.id} target="_blank" rel="noreferrer"><button>Imprimir</button></a>
-                    <a href={`/orders-edit/${order.id}`}><button>Editar peças</button></a>
-                    <a href={"/make-payment/" + order.id}><button>Realizar pagamento</button></a>
-                    <button onClick={async () => {
-                      if (window.confirm('Deseja excluir pedido?')) await api.delete(`/orders/${order.id}`).then(response => {
-                        if (response.status === 204) {
-                          window.location.reload();
-                        }
-                      });
-                    }}>Cancelar / Excluir</button>
-                  </div>
-                </div>
-              )
+            <div className="col-6 col-md-4 mb-2">
+              <label className="mb-1" htmlFor="paymentStatus">Status Pagamento</label>
+              <Select
+                required
+                id="paymentStatus"
+                styles={{
+                  container: (provided) => ({
+                    ...provided,
+                    width: '100%'
+                  })
+                }}
+                placeholder={'Selecione...'}
+                value={paymentStatus}
+                isSearchable
+                isClearable
+                onChange={key => {
+                  if (key)
+                    setPaymentStatus({ value: key.value, label: key.label });
+                  else
+                    setPaymentStatus(null);
+                }}
+                options={paymentStatusOptions}
+              />
+            </div>
 
-            ) : <p className="no-orders-found">Não foi encontrado nenhum pedido.</p>}
-          </div>) : <p className="no-orders-found">Não foi encontrado nenhum pedido.</p>}
+            <div className="col-6 col-md-4 mb-2">
+              <label className="mb-1" htmlFor="orderStatus">Status Serviço</label>
+              <Select
+                required
+                id="orderStatus"
+                styles={{
+                  container: (provided) => ({
+                    ...provided,
+                    width: '100%'
+                  })
+                }}
+                placeholder={'Selecione...'}
+                value={orderStatus}
+                isSearchable
+                isClearable
+                onChange={key => {
+                  if (key)
+                    setOrderStatus({ value: key.value, label: key.label });
+                  else
+                    setOrderStatus(null);
+                }}
+                options={orderStatusOptions}
+              />
+            </div>
+
+            <div className="col-6 col-md-1 mb-2 mt-4">
+              <button className="btn btn-sm btn-primary mt-2" onClick={handleOrdersFilterClick}>Filtrar</button>
+            </div>
+          </div>
+
+
         </div>
-        
-      </main>
+      </div>
+
+      <div className="card">
+        <div className="card-body">
+          <div className="d-flex justify-content-between mb-2">
+            <h5 className="card-title">Listagem</h5>
+            {/* <button className="btn btn-sm btn-primary" onClick={() => handleOpenModal('')}><i className="bi bi-plus-lg"> </i> Adicionar</button> */}
+          </div>
+
+          <div className="table-responsive">
+            <table className="table table-striped table-bordered">
+              <thead className="fw-bold">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Cliente</th>
+                  <th scope="col">Quantidade de Peças</th>
+                  <th scope="col" style={{ whiteSpace: 'nowrap' }}>Data Cadatro</th>
+                  <th scope="col" style={{ whiteSpace: 'nowrap' }}>Data Retirada</th>
+                  <th scope="col">Valor</th>
+                  <th scope="col">Status Pedido</th>
+                  <th scope="col">Status Pagamento</th>
+                  <th scope="col" className="text-center" style={{ width: "10%" }}>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="table-costumers-body">
+                {filteredOrders && filteredOrders.length > 0 ? filteredOrders.map((item) => (
+                  <tr key={item.id}>
+                    <td><strong>{item.id}</strong></td>
+                    <td>{item.customer.toUpperCase()}</td>
+                    <td>{item.item_quantity}</td>
+                    <td>{item.created_at} <br /> <span style={{ whiteSpace: 'nowrap' }}>[{item.created_hours}:00 - {item.created_hours + 1}:00]</span></td>
+                    <td>{item.delivery_date.split('-').reverse().join('/')}</td>
+                    <td>{item.cost.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                    <td>{item.order_status}</td>
+                    <td>
+                      {item.payment_status === 'Pago' ?
+                        (<span className='badge bg-success'>{item.payment_status}</span>) :
+                        (item.payment_status === 'Não pago' ?
+                          (<span className='badge bg-danger'>{item.payment_status}</span>) :
+                          (<span className='badge bg-warning'>{item.payment_status}</span>))
+                      }</td>
+                    <td className="text-center"><a href={`/orders/${item.id}`} target="_blank" rel="noreferrer" className="btn btn-sm btn-info" style={{ whiteSpace: 'nowrap' }}><i className="bi bi-box-arrow-up-right"></i> Detalhes</a> </td>
+                  </tr>
+                )) :
+                  <tr>
+                    <td className="text-center" colSpan={9}>{loadingData ? <Spinner animation="border" role="status" /> : 'Nenhuma peça encontrada.'}</td>
+                  </tr>}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
