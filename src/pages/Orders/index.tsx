@@ -25,7 +25,7 @@ interface Customer {
 };
 
 export default function Orders() {
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const [customerId, setCustomerId] = useState('');
   const [orderId, setOrderId] = useState('');
   const [paymentStatus, setPaymentStatus] = useState<{ value: string; label: string; } | null>(null);
@@ -153,50 +153,60 @@ export default function Orders() {
               />
             </div>
 
-            <div className="col-5 col-md-2 mb-2">
-              <label className="mb-1" htmlFor="filter-created">Data Cadastro</label>
-              <input
-                id="filter-created"
-                required
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                type="date"
-                value={dateCreated}
-                onChange={e => setDateCreated(e.target.value)}
-              />
-            </div>
-            <div className='col-1 col-md-1 mb-2 mt-4' style={{ marginLeft: '-2px' }}>
-              <button className='btn btn-sm btn-outline-secondary mt-2' onClick={() => setDateCreated('')}>X</button>
+            <div className="col-6 col-md-3 mb-2">
+              <div className='row'>
+                <div className='col-10'>
+                  <label className="mb-1" htmlFor="filter-created">Data Cadastro</label>
+                  <input
+                    id="filter-created"
+                    required
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    type="date"
+                    value={dateCreated}
+                    onChange={e => setDateCreated(e.target.value)}
+                  />
+                </div>
+                <div className='col-2 mb-2 mt-4' style={{ marginLeft: '-15px' }}>
+                  <button className='btn btn-sm btn-outline-secondary mt-2' onClick={() => setDateCreated('')}>X</button>
+                </div>
+              </div>
+              
             </div>
 
-            <div className="col-5 col-md-2 mb-2">
-              <label className="mb-1" htmlFor="filter-delivery">Data Retirada</label>
-              <input
-                id="filter-delivery"
-                required
-                className="py-1 px-2"
-                style={{
-                  width: '100%',
-                  borderColor: '#ccc',
-                  borderRadius: '4px',
-                  borderStyle: 'solid',
-                  borderWidth: '1px',
-                }}
-                type="date"
-                value={dateDelivery}
-                onChange={e => {
-                  setDateDelivery(e.target.value)
-                }}
-              />
-            </div>
-            <div className='col-1 col-md-1 mb-2 mt-4' style={{ marginLeft: '-5px' }}>
-              <button className='btn btn-sm btn-outline-secondary mt-2' onClick={() => setDateDelivery('')}>X</button>
+            <div className="col-6 col-md-3 mb-2">
+              <div className="row">
+                <div className="col-10">
+                  <label className="mb-1" htmlFor="filter-delivery">Data Retirada</label>
+                  <input
+                    id="filter-delivery"
+                    required
+                    className="py-1 px-2"
+                    style={{
+                      width: '100%',
+                      borderColor: '#ccc',
+                      borderRadius: '4px',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                    }}
+                    type="date"
+                    value={dateDelivery}
+                    onChange={e => {
+                      setDateDelivery(e.target.value)
+                    }}
+                  />
+                </div>
+                <div className='col-2 mb-2 mt-4' style={{ marginLeft: '-15px' }}>
+                  <button className='btn btn-sm btn-outline-secondary mt-2' onClick={() => setDateDelivery('')}>X</button>
+                </div>
+              </div>
+              
             </div>
 
             <div className="col-6 col-md-3 mb-2">
@@ -243,7 +253,7 @@ export default function Orders() {
             </div>
 
             <div className="col-6 col-md-4 mb-2">
-              <label className="mb-1" htmlFor="orderStatus">Status Serviço</label>
+              <label className="mb-1" htmlFor="orderStatus">Status Retirada</label>
               <Select
                 required
                 id="orderStatus"
@@ -293,8 +303,8 @@ export default function Orders() {
                   <th scope="col" style={{ whiteSpace: 'nowrap' }}>Data Cadatro</th>
                   <th scope="col" style={{ whiteSpace: 'nowrap' }}>Data Retirada</th>
                   <th scope="col">Valor</th>
-                  <th scope="col">Status Pedido</th>
-                  <th scope="col">Status Pagamento</th>
+                  <th scope="col">Retirada</th>
+                  <th scope="col">Pagamento</th>
                   <th scope="col" className="text-center" style={{ width: "10%" }}>Ações</th>
                 </tr>
               </thead>
@@ -307,7 +317,10 @@ export default function Orders() {
                     <td>{item.created_at} <br /> <span style={{ whiteSpace: 'nowrap' }}>[{item.created_hours}:00 - {item.created_hours + 1}:00]</span></td>
                     <td>{item.delivery_date.split('-').reverse().join('/')}</td>
                     <td>{item.cost.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
-                    <td>{item.order_status}</td>
+                    <td>{item.order_status === 'Retirado' ? 
+                      (<span className='badge bg-success'>{item.order_status}</span>) : 
+                      (<span className='badge bg-secondary'>{item.order_status}</span>)}
+                    </td>
                     <td>
                       {item.payment_status === 'Pago' ?
                         (<span className='badge bg-success'>{item.payment_status}</span>) :

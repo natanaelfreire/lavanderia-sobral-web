@@ -304,7 +304,10 @@ export default function Items() {
                     <td><strong>{item.id}</strong></td>
                     <td>{item.description}</td>
                     <td>{parseFloat(item.cost).toFixed(2).split('.').join(',')}</td>
-                    <td className="text-center"><button onClick={() => handleOpenModal(item.id)} className="btn btn-sm btn-warning text-dark"> <i className="bi bi-pencil-square"></i> Editar</button> <button onClick={() => handleDeleteItem(item.id, item.description, item.cost)} className="btn btn-sm btn-danger mt-1 ms-0 mt-lg-0"><i className="bi bi-trash"></i> Excluir</button></td>
+                    <td className="text-center">
+                      <button type="button" onClick={() => handleOpenModal(item.id)} className="btn btn-sm btn-warning text-dark" style={{ whiteSpace: 'nowrap', marginRight: '3px'}}> <i className="bi bi-pencil-square"></i> Editar</button> 
+                      <button type="button" onClick={() => handleDeleteItem(item.id, item.description, item.cost)} className="btn btn-sm btn-danger mt-1 ms-0 mt-lg-0" style={{ whiteSpace: 'nowrap' }}><i className="bi bi-trash"></i> Excluir</button>
+                    </td>
                   </tr>
                 )) :
                   <tr>

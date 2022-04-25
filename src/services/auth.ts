@@ -13,7 +13,7 @@ interface Response {
   };
 }
 
-export function signIn(user: string, password: string): Promise<Response> {
+export async function signIn(user: string, password: string): Promise<Response> {
   return apiAuthorization.post('authorization', {
     user,
     password,
@@ -22,8 +22,8 @@ export function signIn(user: string, password: string): Promise<Response> {
       return response.data;
     }
   }).catch(error => {
-    if (error.response.status === 401) {
-      console.log('Usuário ou senha errado');
+    if (error.response?.status === 401) {
+      //console.log('Usuário ou senha errado');
     }
   })
 }

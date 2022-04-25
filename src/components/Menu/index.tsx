@@ -3,6 +3,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { FiRepeat } from 'react-icons/fi';
 import { IoShirtOutline } from 'react-icons/io5';
 import Dropdown from "react-bootstrap/Dropdown";
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 import logo from '../../assets/images/mini-logo.png';
 import './styles.css';
@@ -13,6 +14,7 @@ const Menu: React.FC = ({ children }) => {
   const history = useHistory();
   const location = useLocation();
   const [user, setUser] = useState('Carregando...');
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     const storageUser = localStorage.getItem('@lavanderia:user');
@@ -25,6 +27,11 @@ const Menu: React.FC = ({ children }) => {
 
     history.push('/');
     window.location.reload();
+  }
+
+  function handleMenuItemClick() {
+    if (width < 1200)
+      setToggleSidebar(!toggleSidebar);
   }
 
   return (
@@ -45,10 +52,20 @@ const Menu: React.FC = ({ children }) => {
             <Dropdown className="nav-item dropdown" align={'end'}>
               <Dropdown.Toggle variant="none" id="dropdown-notifications" className="nav-link nav-icon d-flex align-items-center">
                 <i className="bi bi-bell"></i>
-                <span className="badge bg-primary badge-number" style={{ position: 'absolute', inset: '4px 6px auto auto' }}>4</span>
+                <span className="badge bg-primary badge-number" style={{ position: 'absolute', inset: '4px 6px auto auto' }}>{/*4*/}</span>
               </Dropdown.Toggle>
 
               <Dropdown.Menu className="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                <li className="dropdown-header">
+                  Sem notificações
+                </li>
+                <Dropdown.Divider />
+                <Dropdown.Item className="dropdown-footer">
+                  <Link to="/notifications">Ver todas as notificações</Link>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+
+              {/* <Dropdown.Menu className="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                 <li className="dropdown-header">
                   You have 4 new notifications
                   <Link to="/notifications"><span className="badge rounded-pill bg-primary p-2 ms-2">View all</span></Link>
@@ -93,16 +110,27 @@ const Menu: React.FC = ({ children }) => {
                 <Dropdown.Item className="dropdown-footer">
                   <Link to="/notifications">Show all notifications</Link>
                 </Dropdown.Item>
-              </Dropdown.Menu>
+              </Dropdown.Menu> */}
             </Dropdown>
 
             <Dropdown className="nav-item dropdown" align={'end'}>
               <Dropdown.Toggle variant="none" id="dropdown-messages" className="nav-link nav-icon d-flex align-items-center">
                 <i className="bi bi-chat-left-text"></i>
-                <span className="badge bg-success badge-number" style={{ position: 'absolute', inset: '4px 6px auto auto' }}>3</span>
+                <span className="badge bg-success badge-number" style={{ position: 'absolute', inset: '4px 6px auto auto' }}>{/*`3`*/}</span>
               </Dropdown.Toggle>
 
+              {/* Dropdown.Menu Provisório */}
               <Dropdown.Menu className="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                <li className="dropdown-header">
+                  Sem mensagens
+                </li>
+                <Dropdown.Divider />
+                <Dropdown.Item className="dropdown-footer">
+                  <Link to="/messages">Mostrar todas as mensagens</Link>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+
+              {/* <Dropdown.Menu className="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
                 <li className="dropdown-header">
                   You have 3 new messages
                   <Link to="/messages"><span className="badge rounded-pill bg-primary p-2 ms-2">View all</span></Link>
@@ -144,7 +172,8 @@ const Menu: React.FC = ({ children }) => {
                 <Dropdown.Item className="dropdown-footer">
                   <Link to="/messages">Show all messages</Link>
                 </Dropdown.Item>
-              </Dropdown.Menu>
+              </Dropdown.Menu> */}
+
             </Dropdown>
 
             <Dropdown className="nav-item dropdown pe-3" align={'end'}>
@@ -172,14 +201,14 @@ const Menu: React.FC = ({ children }) => {
 
         <ul className="sidebar-nav" id="sidebar-nav">
 
-          <li className="nav-item">
+          <li className="nav-item" onClick={handleMenuItemClick}>
             <Link to="/create-order" className="nav-link justify-content-center border border-warning text-warning" id="btnCreateOrder">
               <i className="bi bi-plus-square"></i>
               <span>Criar Pedido</span>
             </Link>
           </li>
 
-          <li className="nav-item">
+          <li className="nav-item" onClick={handleMenuItemClick}>
             <Link className={`nav-link ${location.pathname === '/dashboard' ? '' : 'collapsed'}`} to="/dashboard">
               <i className="bi bi-grid"></i>
               <span>Dashboard</span>
@@ -188,14 +217,14 @@ const Menu: React.FC = ({ children }) => {
 
           <li className="nav-heading">Cadastros</li>
 
-          <li className="nav-item">
+          <li className="nav-item" onClick={handleMenuItemClick}>
             <Link className={`nav-link ${location.pathname === '/customers' ? '' : 'collapsed'}`} to="/customers">
               <i className="bi bi-person"></i>
               <span>Clientes</span>
             </Link>
           </li>
 
-          <li className="nav-item">
+          <li className="nav-item" onClick={handleMenuItemClick}>
             <Link className={`nav-link ${location.pathname === '/items' ? '' : 'collapsed'}`} to="/items">
               <IoShirtOutline style={{ marginRight: '10px' }} />
               <span>Peças</span>
@@ -204,14 +233,14 @@ const Menu: React.FC = ({ children }) => {
 
           <li className="nav-heading">Buscas</li>
 
-          <li className="nav-item">
+          <li className="nav-item" onClick={handleMenuItemClick}>
             <Link className={`nav-link ${location.pathname === '/processing' ? '' : 'collapsed'}`} to="/processing">
               <FiRepeat style={{ marginRight: '10px' }} />
               <span>Entradas e Saídas</span>
             </Link>
           </li>
 
-          <li className="nav-item">
+          <li className="nav-item" onClick={handleMenuItemClick}>
             <Link className={`nav-link ${location.pathname === '/orders' ? '' : 'collapsed'}`} to="/orders">
               <i className="bi bi-pencil-square"></i>
               <span>Pedidos</span>
@@ -220,8 +249,8 @@ const Menu: React.FC = ({ children }) => {
 
           <li className="nav-heading">Financeiro</li>
 
-          <li className="nav-item">
-            <Link className={`nav-link ${location.pathname === '/payment' ? '' : 'collapsed'}`} to="/payment">
+          <li className="nav-item" onClick={handleMenuItemClick}>
+            <Link className={`nav-link ${location.pathname === '/receipts' ? '' : 'collapsed'}`} to="/receipts">
               <i className="bi bi-cash"></i>
               <span>Recebimentos</span>
             </Link>
@@ -232,7 +261,7 @@ const Menu: React.FC = ({ children }) => {
       </aside>
 
       <main id="main" className="main">
-        {children}        
+        {children}
       </main>
 
     </div>
