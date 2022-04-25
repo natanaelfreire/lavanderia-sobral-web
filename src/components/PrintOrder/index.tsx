@@ -24,7 +24,7 @@ type OrderItemResponse = {
   item_id: string,
   description: string,
   observation: string,
-  unit_quantity: number,
+  unit_quantity: string,
   unit_cost: number,
   unit_discount: number,
   unit_subtotal: number
@@ -158,7 +158,7 @@ const PrintOrder: React.FC = () => {
                   <tr key={key}>
                     <td style={{ padding: '1px' }}>{item.description.toUpperCase()}</td>
                     <td style={{ padding: '1px' }}>{item.observation.toUpperCase()}</td>
-                    <td style={{ textAlign: 'center', padding: '1px' }}>{item.unit_quantity.toFixed(0)}</td>
+                    <td style={{ textAlign: 'center', padding: '1px' }}>{parseInt(item.unit_quantity).toFixed(0)}</td>
                     <td style={{ textAlign: 'center', padding: '1px' }}>{formatoDinheiro(item.unit_cost)}</td>
                     <td style={{ textAlign: 'center', padding: '1px' }}>{formatoDinheiro(item.unit_discount)}</td>
                     <td style={{ textAlign: 'center', padding: '1px' }}>{formatoDinheiro(item.unit_subtotal)}</td>
@@ -263,7 +263,7 @@ const PrintOrder: React.FC = () => {
                   <tr key={key}>
                     <td style={{ padding: '1px' }}>{item.description.toUpperCase()}</td>
                     <td style={{ padding: '1px' }}>{item.observation.toUpperCase()}</td>
-                    <td style={{ textAlign: 'center', padding: '1px' }}>{item.unit_quantity.toFixed(0)}</td>
+                    <td style={{ textAlign: 'center', padding: '1px' }}>{parseInt(item.unit_quantity).toFixed(0)}</td>
                     <td style={{ textAlign: 'center', padding: '1px' }}>{formatoDinheiro(item.unit_cost)}</td>
                     <td style={{ textAlign: 'center', padding: '1px' }}>{formatoDinheiro(item.unit_discount)}</td>
                     <td style={{ textAlign: 'center', padding: '1px' }}>{formatoDinheiro(item.unit_subtotal)}</td>
