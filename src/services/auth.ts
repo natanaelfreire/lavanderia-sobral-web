@@ -5,6 +5,8 @@ const apiAuthorization = axios.create({
   baseURL: process.env.REACT_APP_API_URL || 'localhost://3333',
 });
 
+apiAuthorization.defaults.headers['Access-Control-Allow-Origin'] = 'https://lavanderiasobral.netlify.app'
+
 interface Response {
   token: string;
   user: {
