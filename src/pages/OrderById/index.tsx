@@ -252,7 +252,7 @@ export default function OrderById() {
                           {orderData.items.map(item => (
                             <tr key={item.item_id}>
                               <td style={{ whiteSpace: 'nowrap' }}>{item.description}</td>
-                              <td style={{ whiteSpace: 'nowrap' }}>{item.unit_quantity}</td>
+                              <td style={{ whiteSpace: 'nowrap' }}>{parseInt(item.unit_quantity).toFixed(0)}</td>
                               <td>{formatoDinheiro(parseFloat(item.unit_cost))}</td>
                               <td>{formatoDinheiro(parseFloat(item.unit_discount))}</td>
                               <td style={{ textAlign: 'right' }}>{formatoDinheiro(parseFloat(item.unit_subtotal))}</td>
