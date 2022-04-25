@@ -15,13 +15,13 @@ interface OrderInsAndOuts {
 export default function Processing() {
   const [dateFilter, setDateFilter] = useState(new Date().toLocaleDateString('pt-br').split('/').reverse().join('-'));
 
-  const [displayedOrdersIn, setDisplayedOrdersIn] = useState<OrderInsAndOuts[]>([]);
-  const [displayedOrdersOut, setDisplayedOrdersOut] = useState<OrderInsAndOuts[]>([]);
+  const [displayedOrdersIn, setDisplayedOrdersIn] = useState<OrderInsAndOuts[] | null>(null);
+  const [displayedOrdersOut, setDisplayedOrdersOut] = useState<OrderInsAndOuts[] | null>(null);
 
   useEffect(() => {
     async function loadOrders() {
       if (dateFilter) {
-        api.post('orders-ins-outs', {
+        api.post('orders/insAndOuts', {
           date: dateFilter,
         }).then(response => {
           if (response.status === 200) {
