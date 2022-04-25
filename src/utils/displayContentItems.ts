@@ -3,7 +3,7 @@ import api from "../services/api";
 interface Item {
   id: string;
   description: string;
-  cost: number;
+  cost: string;
 }
 
 export default function displayContentItems(content: Item[]) {

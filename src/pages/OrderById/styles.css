@@ -1,0 +1,21 @@
+.checkmark {
+  height: 25px !important;
+  width: 25px !important;
+}
+
+/* On mouse-over, add a grey background color */
+.checkmark:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.checkmarkLabel {
+  font-size: medium;
+  font-weight: 500;
+  margin-left: 5px;
+  margin-top: 2px;
+}
+
+.checkmarkLabel:hover {
+  cursor: pointer;
+}

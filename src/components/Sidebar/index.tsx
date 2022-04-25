@@ -3,7 +3,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { FiUsers, FiEdit, FiRepeat } from 'react-icons/fi'
 import { IoShirtOutline } from 'react-icons/io5';
 import { FaPlus } from 'react-icons/fa';
-import { GiMoneyStack } from 'react-icons/gi';
+import { BiMoney } from 'react-icons/bi';
+import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 
 import logoImg from '../../assets/images/logo.jpg';
 
@@ -36,8 +37,9 @@ export default function Sidebar() {
       <Link to="/customers" className="options"><FiUsers size="18px"/> &nbsp; Clientes</Link>
       <Link to="/items" className="options"><IoShirtOutline size="18px"/> &nbsp; Peças</Link>
       <Link to="/orders" className="options"><FiEdit size="18px"/> &nbsp; Pedidos</Link>
-      <Link to="/processing" className="options"><FiRepeat size="18px"/> &nbsp; Processamento</Link>
-      <Link to="/payment" className="options"><GiMoneyStack size="18px"/> &nbsp; Não Pagos</Link>
+      <Link to="/processing" className="options"><FiRepeat size="18px"/> &nbsp; Entradas e Saídas</Link>
+      <Link to="/payment" className="options"><BiMoney size="18px"/> &nbsp; Não Pagos</Link>
+      <Link to="/payment" className="options"><RiMoneyDollarCircleLine size="18px"/> &nbsp; Financeiro</Link>
       <p className="username">{user}</p>
       <p className="logout" onClick={handleLogout}>Sair</p>
     </div>

@@ -1,83 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import monthToNumber from '../../utils/monthToNumber';
-
-import Sidebar from '../../components/Sidebar';
-
-import './styles.css';
 
 import api from '../../services/api';
-import displayOrdersProcessing from '../../utils/displayOrdersProcessing';
 
-interface OrderDisplaeyd {
-  id: string;
+interface OrderInsAndOuts {
+  id: number;
   order_status: string;
+  payment_status: string;
   delivery_date: string;
   created_at: string;
-  date_number: number;
-  date_out_number: number;
   created_hours: number;
-  customer_id: string;
+  name: string;
 }
 
 export default function Processing() {
-  const [ calendarValue, setCalendarValue ] = useState<Date | Date[]>([ new Date(), new Date() ]);
-  const [ calendarStart, setCalendarStart ] = useState('');
-  const [ calendarEnd, setCalendarEnd ] = useState('');
+  const [dateFilter, setDateFilter] = useState(new Date().toLocaleDateString('pt-br').split('/').reverse().join('-'));
 
-  const [ filteredInOrders, setFilteredInOrders ] = useState<OrderDisplaeyd[]>([]);
-  const [ filteredOutOrders, setFilteredOutOrders ] = useState<OrderDisplaeyd[]>([]);
+  const [displayedOrdersIn, setDisplayedOrdersIn] = useState<OrderInsAndOuts[]>([]);
+  const [displayedOrdersOut, setDisplayedOrdersOut] = useState<OrderInsAndOuts[]>([]);
 
   useEffect(() => {
-    if (Array.isArray(calendarValue)) {
-      let start = calendarValue[0].toString();
-      let end = calendarValue[1].toString();
-      
-      start = start.split('GMT')[0];
-      end = end.split('GMT')[0];
-      
-      let startDay = start.split(' ')[2];
-      let startMonth = monthToNumber(start.split(' ')[1]);
-      let startYear = start.split(' ')[3];
-      let endDay = end.split(' ')[2];
-      let endMonth = monthToNumber(end.split(' ')[1]);
-      let endYear = end.split(' ')[3];
-
-      setCalendarStart(startYear + '-' + startMonth + '-' + startDay);
-      setCalendarEnd(endYear + '-' + endMonth + '-' + endDay);
-    }
-  }, [calendarValue]);
-
-  useEffect(() => {
-    const optionSelected = document.querySelector('#style-selected');
-    const className =  optionSelected?.getAttribute('class');
-
     async function loadOrders() {
-      if (calendarStart && calendarEnd) {
-        api.get('orders', {
-          params: {
-            dateStart: calendarStart,
-            dateEnd: calendarEnd,
-            outOrders: true
-          }
+      if (dateFilter) {
+        api.post('orders-ins-outs', {
+          date: dateFilter,
         }).then(response => {
           if (response.status === 200) {
-            setFilteredOutOrders(response.data);
-            if (className === 'ordersOut') displayOrdersProcessing(response.data);
-          }         
-        });
-        
-        api.get('orders', {
-          params: {
-            dateStart: calendarStart,
-            dateEnd: calendarEnd
-          }
-        }).then(response => {
-          if (response.status === 200) {
-            const { orders } = response.data;
-            setFilteredInOrders(orders);
-            if (className === 'ordersIn') displayOrdersProcessing(orders);
+            const data: { ordersIn: OrderInsAndOuts[], ordersOut: OrderInsAndOuts[] } = response.data;
+
+            setDisplayedOrdersIn(data.ordersIn);
+            setDisplayedOrdersOut(data.ordersOut);
           }
         });
       }
@@ -85,56 +36,84 @@ export default function Processing() {
 
     loadOrders();
 
-  }, [calendarStart, calendarEnd]);
-
-  function handleInClick() {
-    const buttonIn = document.querySelector('.ordersIn');
-    const buttonOut = document.querySelector('.ordersOut');
-    buttonIn?.setAttribute('id', 'style-selected');
-    buttonOut?.setAttribute('id', '');
-
-    displayOrdersProcessing(filteredInOrders);
-  }
-
-  function handleOutClick() {
-    const buttonIn = document.querySelector('.ordersIn');
-    const buttonOut = document.querySelector('.ordersOut');
-    buttonIn?.setAttribute('id', '');
-    buttonOut?.setAttribute('id', 'style-selected');
-
-    displayOrdersProcessing(filteredOutOrders);
-  }
+  }, [dateFilter]);
 
   return (
-    <div className="page-processing">
-      <Sidebar/>
+    <div className="">
 
-      <main className="main-content">
-        <h1>Processamento</h1>
+      <div className="row">
+        <div className="col-12 col-md-3 mb-2">
+          <label className="mb-1" htmlFor="filter-date">Data Referência</label>
+          <input
+            id="filter-date"
+            required
+            className="py-1 px-2"
+            style={{
+              width: '100%',
+              borderColor: '#ccc',
+              borderRadius: '4px',
+              borderStyle: 'solid',
+              borderWidth: '1px',
+            }}
+            type="date"
+            value={dateFilter}
+            onChange={e => {
+              setDateFilter(e.target.value)
+            }}
+          />
+        </div>
+      </div>
 
-        <div className="body-content">
-          <div className="calendar-display">
-            <Calendar 
-              onChange={e => setCalendarValue(e)}
-              selectRange
-              value={calendarValue}
-            />          
+      <div className="row">
+        <div className="col-12 col-md-6 mt-2 mb-2">
+          <div className="pagetitle" style={{ color: "#4154f1" }}>
+            <h4>Saídas <i className="bi bi-arrow-bar-right"></i></h4>
           </div>
 
-          <div className="orders-block">
-            <div className="buttons-top">
-              <button onClick={handleInClick} className="ordersIn" id="style-selected">Entradas</button>
-              <button onClick={handleOutClick} className="ordersOut">Saídas</button>
+          <div className="row">
+            <div className="col-12 col-sm-10">
+              {displayedOrdersOut && displayedOrdersOut.length > 0 ? displayedOrdersOut.map(order => (
+                <div className="card mb-3 bg-light" style={{ width: '100%' }} key={order.id}>
+                  <div className="card-body">
+                    <h5 className="card-title fw-bold">{order.name.toUpperCase()}</h5>
+                    <hr></hr>
+                    <h6 className="card-subtitle mb-2 text-muted">Data Retirada: {order.delivery_date.split('-').reverse().join('/')}</h6>
+                    <hr></hr>
+                    <p className="card-text">Retirada: <span className={`badge ${order.order_status === 'Retirado' ? 'bg-success' : 'bg-secondary'}`}>{order.order_status}</span></p>
+                    <p className="card-text">Pagamento: <span className={`badge ${order.payment_status === 'Pago' ? 'bg-success' : 'bg-danger'}`}>{order.payment_status}</span></p>
+                    <a href={`/orders/${order.id}`} target="_blank" rel="noreferrer" className="btn btn-link float-start p-0" style={{ fontSize: '14px' }}>Detalhes <i className="bi bi-box-arrow-up-right"></i></a>
+                  </div>
+                </div>
+              )) : ''}
             </div>
-            
-            <div className="orders-display">
-              
-            </div>
-
           </div>
         </div>
-      
-      </main>
+
+        <div className="col-12 col-md-6 mt-2 mb-2">
+          <div className="pagetitle" style={{ color: "#4154f1" }}>
+            <h4>Entradas <i className="bi bi-arrow-bar-left"></i></h4>
+          </div>
+
+          <div className="row">
+            <div className="col-12 col-sm-10">
+              {displayedOrdersIn && displayedOrdersIn.length > 0 ? displayedOrdersIn.map(order => (
+                <div className="card mb-3 bg-light" style={{ width: '100%' }} key={order.id}>
+                  <div className="card-body">
+                    <h5 className="card-title fw-bold">{order.name.toUpperCase()}</h5>
+                    <hr></hr>
+                    <h6 className="card-subtitle mb-2 text-muted">Criado em {order.created_at} [{order.created_hours}:00 - {order.created_hours + 1}:00]</h6>
+                    <hr></hr>
+                    <p className="card-text">Retirada: <span className={`badge ${order.order_status === 'Retirado' ? 'bg-success' : 'bg-secondary'}`}>{order.order_status}</span></p>
+                    <p className="card-text">Pagamento: <span className={`badge ${order.payment_status === 'Pago' ? 'bg-success' : 'bg-danger'}`}>{order.payment_status}</span></p>
+                    <a href={`/orders/${order.id}`} target="_blank" rel="noreferrer" className="btn btn-link float-start p-0" style={{ fontSize: '14px' }}>Detalhes <i className="bi bi-box-arrow-up-right"></i></a>
+                  </div>
+                </div>
+              )) : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
