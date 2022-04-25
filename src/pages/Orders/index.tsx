@@ -292,7 +292,7 @@ export default function Orders() {
             <h5 className="card-title">Listagem</h5>
             {/* <button className="btn btn-sm btn-primary" onClick={() => handleOpenModal('')}><i className="bi bi-plus-lg"> </i> Adicionar</button> */}
           </div>
-
+          
           <div className="table-responsive">
             <table className="table table-striped table-bordered">
               <thead className="fw-bold">

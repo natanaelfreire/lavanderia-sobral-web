@@ -42,8 +42,8 @@ export default async function displayOrdersProcessing(filteredOrders: OrderDispl
       statusButton.className = 'order-status-pendente';
       statusButton.textContent = 'A receber';
       statusButton.onclick = async function () {
-        if (window.confirm('Mudar status do pedido para Coletado?')) await api.patch(`orders/${bottom.id}`, {
-          order_status: 'Coletado'
+        if (window.confirm('Mudar status do pedido para Retirado?')) await api.patch(`orders/${bottom.id}`, {
+          order_status: 'Retirado'
         }).then(() => window.location.reload());
       }
 
@@ -52,7 +52,7 @@ export default async function displayOrdersProcessing(filteredOrders: OrderDispl
     else {
       const statusButton = document.createElement('button');
       statusButton.className = 'order-status-coletado';
-      statusButton.textContent = 'Coletado';
+      statusButton.textContent = 'Retirado';
       statusButton.onclick = async function () {
         if (window.confirm('Mudar status do pedido para Pendente?')) await api.patch(`orders/${bottom.id}`, {
           order_status: 'Pendente'
