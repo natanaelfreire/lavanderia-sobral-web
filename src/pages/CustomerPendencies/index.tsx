@@ -15,7 +15,7 @@ type Pendencies = {
   id: number;
   created_at: string;
   payment_status: string;
-  cost: number;
+  cost: string;
 }[];
 
 export default function CustomerPendencies() {
@@ -48,7 +48,7 @@ export default function CustomerPendencies() {
     let newAmount = 0;
 
     for (const p of pendencies)
-      newAmount += p.cost;
+      newAmount += parseFloat(p.cost);
 
     return newAmount;
   }
@@ -93,7 +93,7 @@ export default function CustomerPendencies() {
                         <tbody>
                           <tr>
                             <td style={{border: 'none'}}>Pedido nº {pendence.id} no valor</td>
-                            <td style={{ textAlign: 'right', border: 'none' }} className="fs-6"><strong>{pendence.cost.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</strong></td>
+                            <td style={{ textAlign: 'right', border: 'none' }} className="fs-6"><strong>{moneyFormat(pendence.cost)}</strong></td>
                           </tr>
                           <tr>
                             <td style={{border: 'none'}}>Pagamento:</td>
