@@ -9,10 +9,10 @@ type Receipt = {
   description: string;
   status: string;
   payment_type: string;
-  subtotal: number;
-  discount?: number | null;
-  addition?: number | null;
-  amount_received: number;
+  subtotal: string;
+  discount?: string | null;
+  addition?: string | null;
+  amount_received: string;
   due_date: string;
   payment_date: string | null;
   cancelling_date: string | null;
@@ -66,9 +66,10 @@ export default function Receipts() {
 
   function getAmount(receipts: Receipt[]) {
     let amount = 0;
-    receipts.forEach(item => {
-      amount += item.amount_received;
-    })
+
+    for (const item of receipts) {
+      amount += parseFloat(item.amount_received);
+    }
 
     return amount;
   }
@@ -264,7 +265,7 @@ export default function Receipts() {
                           <td>{item.id}</td>
                           <td>{item.description}</td>
                           <td>{item.payment_date?.split('-').reverse().join('/')}</td>
-                          <td>{item.amount_received.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
+                          <td>{parseFloat(item.amount_received).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
                           <td>{item.customer_name.toUpperCase()}</td>
                         </tr>
                       )) :
