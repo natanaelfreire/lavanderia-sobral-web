@@ -13,11 +13,11 @@ type OrderResponse = {
   order_status: string,
   delivery_date: string,
   item_quantity: number,
-  cost: number,
+  cost: string,
   created_at: string,
   created_hours: number,
   customer_id: number,
-  payment_made: number
+  payment_made: string
 }
 
 type OrderItemResponse = {
@@ -25,9 +25,9 @@ type OrderItemResponse = {
   description: string,
   observation: string,
   unit_quantity: string,
-  unit_cost: number,
-  unit_discount: number,
-  unit_subtotal: number
+  unit_cost: string,
+  unit_discount: string,
+  unit_subtotal: string
 }
 
 type CustomerResponse = {
@@ -76,8 +76,8 @@ const PrintOrder: React.FC = () => {
 
   }, [searchCustomerId, searchOrderId]);
 
-  function formatoDinheiro(value: number) {
-    return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+  function formatoDinheiro(value: string) {
+    return value.replace('.', ',');
   }
 
   return <>
@@ -125,11 +125,11 @@ const PrintOrder: React.FC = () => {
                 <tbody>
                   <tr>
                     <td style={{ padding: 0 }}><b>TOTAL A PAGAR:</b></td>
-                    <td style={{ padding: 0, fontSize: '18px', textAlign: 'right' }}><b>{formatoDinheiro(dados.order.cost)}</b></td>
+                    <td style={{ padding: 0, fontSize: '18px', textAlign: 'right' }}><b>{parseFloat(dados.order.cost).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</b></td>
                   </tr>
                   <tr>
                     <td style={{ padding: 0 }}><b>Pagamento Prévio:</b></td>
-                    <td style={{ padding: 0, textAlign: 'right' }}>{formatoDinheiro(dados.order.payment_made)}</td>
+                    <td style={{ padding: 0, textAlign: 'right' }}>{parseFloat(dados.order.payment_made).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</td>
                   </tr>
                   <tr>
                     <td style={{ padding: 0 }}><b>Data Retirada:</b></td>
